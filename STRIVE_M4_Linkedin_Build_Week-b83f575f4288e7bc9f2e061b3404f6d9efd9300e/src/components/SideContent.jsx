@@ -51,7 +51,7 @@ class SideContent extends React.Component {
           return (
             <Row key={i} className='pb-3 d-flex align-items-center'>
               <Col md={4}>
-                {user.image === undefined || user.image === "" ? (
+                {user.image.length === 0 ? (
                   <Image
                     onClick={() =>
                       this.props.props.history.push(

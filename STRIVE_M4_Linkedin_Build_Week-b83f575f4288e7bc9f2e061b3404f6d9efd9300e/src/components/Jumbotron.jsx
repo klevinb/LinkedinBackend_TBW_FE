@@ -80,6 +80,30 @@ class JumBotron extends Component {
     setTimeout(() => this.handleUpload(), 200);
   };
 
+  getPdf = async () => {
+    const name = this.props.profileInfo.name;
+    fetch(apiKey + "/api/profile/" + this.props.profileInfo.username + "/pdf", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + this.props.authoKey,
+      },
+    })
+      .then(function (response) {
+        return response.arrayBuffer();
+      })
+      .then(function (data) {
+        // create a blob url representing the data
+        var blob = new Blob([data]);
+        var url = window.URL.createObjectURL(blob);
+        // attach blob url to anchor element with download attribute
+        var anchor = document.createElement("a");
+        anchor.setAttribute("href", url);
+        anchor.setAttribute("download", `${name}CV.pdf`);
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+      });
+  };
+
   render() {
     return (
       <div id='jumbotronMain' className='contentCol box-shadow '>
@@ -130,7 +154,9 @@ class JumBotron extends Component {
                   <>
                     <div className='d-flex'>
                       <Button>Add profile section</Button>
-                      <Button id='secondButton'>More ...</Button>
+                      <Button id='secondButton' onClick={() => this.getPdf()}>
+                        More ...
+                      </Button>
                       <div
                         onClick={() =>
                           this.setState({
@@ -153,7 +179,9 @@ class JumBotron extends Component {
                 ) : (
                   <>
                     <Button>Message</Button>
-                    <Button id='secondButton'>More ...</Button>
+                    <Button id='secondButton' onClick={() => this.getPdf()}>
+                      More ...
+                    </Button>
                   </>
                 )}
               </div>
