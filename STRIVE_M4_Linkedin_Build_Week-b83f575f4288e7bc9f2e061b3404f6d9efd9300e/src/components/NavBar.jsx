@@ -21,7 +21,10 @@ class NavBar extends Component {
         <Navbar bg='dark' expand='lg' className='navBar'>
           <div className='container'>
             <div className='d-flex'>
-              <Image src='/assets/logo.png' style={{ width: "70px" }} />
+              <Image
+                src='https://touchmba.com/wp-content/uploads/2017/06/LinkedIn-Logo.png'
+                style={{ width: "50px" }}
+              />
               <Navbar.Brand href='#home'></Navbar.Brand>
               <Dropdown
                 show={this.props.status}

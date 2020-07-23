@@ -86,6 +86,8 @@ class Feed extends Component {
         "Content-Type": "application/json",
       }),
     });
+
+    if (resp.ok) this.setState({ showModal: false });
     const id = await resp.json();
 
     const resp2 = await fetch(apiKey + "/api/posts/" + id + "/upload", {
@@ -96,13 +98,13 @@ class Feed extends Component {
       }),
     });
 
-    if (resp2.ok) {
-      this.setState(
-        {
-          showModal: false,
-        },
-        () => this.fetchPosts()
-      );
+    if (resp2.ok) this.fetchPosts();
+  };
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.feeds !== this.state.feeds) {
+      this.setState({
+        feeds: this.state.feeds,
+      });
     }
   };
 

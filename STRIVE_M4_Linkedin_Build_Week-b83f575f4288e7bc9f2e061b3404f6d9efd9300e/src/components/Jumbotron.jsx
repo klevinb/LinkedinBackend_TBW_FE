@@ -26,19 +26,23 @@ class JumBotron extends Component {
     const photo = new FormData();
     photo.append("profile", this.state.profile);
 
-    await fetch(apiKey + "/api/profile/" + this.props.username + "/upload", {
-      method: "POST",
-      body: photo,
-      headers: new Headers({
-        Authorization: "Bearer " + this.props.authoKey,
-      }),
-    });
+    const resp = await fetch(
+      apiKey + "/api/profile/" + this.props.username + "/upload",
+      {
+        method: "POST",
+        body: photo,
+        headers: new Headers({
+          Authorization: "Bearer " + this.props.authoKey,
+        }),
+      }
+    );
+    if (resp.ok) this.props.refetch();
   };
   handleCoverUpload = async () => {
     const photo = new FormData();
     photo.append("cover", this.state.cover);
 
-    await fetch(
+    const resp = await fetch(
       apiKey + "/api/profile/" + this.props.username + "/upload/cover",
       {
         method: "POST",
@@ -48,6 +52,7 @@ class JumBotron extends Component {
         }),
       }
     );
+    if (resp.ok) this.props.refetch();
   };
 
   editProfileInfo = async (e) => {

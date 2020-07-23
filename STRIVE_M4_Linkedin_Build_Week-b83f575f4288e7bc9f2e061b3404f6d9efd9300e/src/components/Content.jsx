@@ -12,7 +12,7 @@ const apiKey = process.env.REACT_APP_API;
 
 class Content extends Component {
   state = {
-    userInfo: undefined,
+    userInfo: "",
     userId: this.props.match.params.userID,
     loading: true,
   };
@@ -27,13 +27,10 @@ class Content extends Component {
 
     if (resp.ok) {
       let respObj = await resp.json();
-      this.setState(
-        {
-          userInfo: respObj,
-          loading: false,
-        },
-        () => this.props.getUserImg(this.state.userInfo.image)
-      );
+      this.setState({
+        userInfo: respObj,
+        loading: false,
+      });
     }
   };
 
@@ -50,7 +47,15 @@ class Content extends Component {
       );
       // doing the fetch again
       // save userInfo in the state
+    } else if (prevState.userInfo !== this.state.userInfo) {
+      this.setState({
+        userInfo: this.state.userInfo,
+      });
     }
+  };
+
+  refetch = () => {
+    this.fetchFunction();
   };
 
   componentDidMount = () => {
@@ -77,6 +82,7 @@ class Content extends Component {
             <>
               <Col md={9} className='d-flex flex-column mb-3 '>
                 <Jumbotron
+                  refetch={this.refetch}
                   username={this.props.username}
                   authoKey={this.props.authoKey}
                   profileInfo={this.state.userInfo}
@@ -88,7 +94,7 @@ class Content extends Component {
                 <Experiences
                   username={this.props.username}
                   authoKey={this.props.authoKey}
-                  userID={this.state.userInfo.username}
+                  userID={this.state.userId}
                 />
               </Col>
               <Col md={3} className='sideContent pl-4 pt-4'>

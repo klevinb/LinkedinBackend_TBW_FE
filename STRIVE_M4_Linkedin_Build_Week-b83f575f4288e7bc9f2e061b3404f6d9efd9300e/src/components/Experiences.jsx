@@ -209,7 +209,7 @@ class Experiences extends Component {
     this.fetchUserData();
   };
 
-  componentDidUpdate = async () => {
+  componentDidUpdate = async (prevProps, prevState) => {
     if (this.state.userID !== this.props.userID) {
       this.setState({ userID: this.props.userID }, async () => {
         await fetch(
