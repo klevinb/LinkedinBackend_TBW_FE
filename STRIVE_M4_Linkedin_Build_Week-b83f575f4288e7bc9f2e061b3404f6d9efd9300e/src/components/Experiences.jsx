@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Image, Form, Button, Row, Col } from "react-bootstrap";
-import { RiPencilLine } from "react-icons/ri";
+import { RiPencilLine, RiDownloadLine } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import "./MainCss.css";
 
@@ -231,13 +231,35 @@ class Experiences extends Component {
     }
   };
 
+  getExpCsv = () => {
+    const username = this.props.userID;
+    fetch(apiKey + "/api/profile/" + this.props.userID + "/experiences/CSV", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + this.props.authoKey,
+      },
+    })
+      .then(function (response) {
+        return response.arrayBuffer();
+      })
+      .then(function (data) {
+        var blob = new Blob([data]);
+        var url = window.URL.createObjectURL(blob);
+        var anchor = document.createElement("a");
+        anchor.setAttribute("href", url);
+        anchor.setAttribute("download", `${username}Experiences.csv`);
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+      });
+  };
+
   render() {
     return (
       <>
         <div className='mainContent p-4 mb-3 box-shadow '>
           <div className='d-flex justify-content-between'>
             <h4>Experiences</h4>
-            <div>
+            <div className='d-flex justify-content-between'>
               {this.props.userID === this.props.username && (
                 <div
                   onClick={() =>
@@ -250,6 +272,9 @@ class Experiences extends Component {
                   <AiOutlinePlus />
                 </div>
               )}
+              <div onClick={() => this.getExpCsv()}>
+                <RiDownloadLine />
+              </div>
             </div>
           </div>
           {this.state.userData &&

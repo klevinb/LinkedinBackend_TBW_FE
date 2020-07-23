@@ -11,6 +11,7 @@ const apiKey = process.env.REACT_APP_API;
 class JumBotron extends Component {
   state = {
     profile: null,
+    cover: null,
     profileInfo: {
       name: this.props.profileInfo.name,
       surname: this.props.profileInfo.surname,
@@ -25,8 +26,20 @@ class JumBotron extends Component {
     const photo = new FormData();
     photo.append("profile", this.state.profile);
 
-    let resp = await fetch(
-      apiKey + "/api/profile/" + this.props.username + "/upload",
+    await fetch(apiKey + "/api/profile/" + this.props.username + "/upload", {
+      method: "POST",
+      body: photo,
+      headers: new Headers({
+        Authorization: "Bearer " + this.props.authoKey,
+      }),
+    });
+  };
+  handleCoverUpload = async () => {
+    const photo = new FormData();
+    photo.append("cover", this.state.cover);
+
+    await fetch(
+      apiKey + "/api/profile/" + this.props.username + "/upload/cover",
       {
         method: "POST",
         body: photo,
@@ -80,6 +93,15 @@ class JumBotron extends Component {
     setTimeout(() => this.handleUpload(), 200);
   };
 
+  addCover = (e) => {
+    const cover = e.target.files[0];
+
+    this.setState({
+      cover,
+    });
+    setTimeout(() => this.handleCoverUpload(), 200);
+  };
+
   getPdf = async () => {
     const name = this.props.profileInfo.name;
     fetch(apiKey + "/api/profile/" + this.props.profileInfo.username + "/pdf", {
@@ -109,11 +131,17 @@ class JumBotron extends Component {
       <div id='jumbotronMain' className='contentCol box-shadow '>
         <div id='cameraIcon'>
           {this.props.profileInfo.username === this.props.username && (
-            <TiCameraOutline />
+            <label htmlFor='coverUpload'>
+              <TiCameraOutline />
+            </label>
           )}
         </div>
         <div id='jumbotron'>
-          <Image fluid className='w-100' src='/assets/jumbotronCover.jpeg' />
+          {this.props.profileInfo.cover ? (
+            <Image fluid className='w-100' src={this.props.profileInfo.cover} />
+          ) : (
+            <Image fluid className='w-100' src='/assets/jumbotronCover.jpeg' />
+          )}
         </div>
         <div id='profilePhoto'>
           {this.props.profileInfo.username === this.props.username && (
@@ -173,6 +201,14 @@ class JumBotron extends Component {
                       id='upload'
                       profile='file'
                       onChange={(e) => this.handleChange(e)}
+                      accept='image/*'
+                    />
+                    <input
+                      style={{ display: "none" }}
+                      type='file'
+                      id='coverUpload'
+                      profile='file'
+                      onChange={(e) => this.addCover(e)}
                       accept='image/*'
                     />
                   </>

@@ -29,11 +29,13 @@ class Login extends Component {
       email: "",
       bio: "",
       title: "",
+      about: "",
       area: "",
       image: "",
       username: "",
     },
     token: "",
+    fromLogin: false,
   };
 
   setName = (e) => {
@@ -82,7 +84,7 @@ class Login extends Component {
       this.props.history.push("/profiles/" + data.username);
       this.props.showApp();
     } else {
-      this.setState({ signup: true });
+      this.setState({ signup: true, fromLogin: true });
     }
   };
 
@@ -169,20 +171,38 @@ class Login extends Component {
               <Button block bsSize='large' type='submit'>
                 Login
               </Button>
+              <div className='d-flex justify-content-center mt-2'>
+                <Button
+                  id='createAccLink'
+                  onClick={() =>
+                    this.setState({
+                      signup: !this.state.signup,
+                      fromLogin: false,
+                    })
+                  }
+                >
+                  Create an account
+                </Button>
+              </div>
               {this.state.signup ? (
                 <>
                   <div className='mt-5'>
-                    <Alert variant='warning'>
-                      "We cannot find users with this credentials"
-                    </Alert>
-                    <div className='d-flex justify-content-center'>
-                      <Button
-                        variant='info'
-                        onClick={() => this.setState({ login: false })}
-                      >
-                        Create a new User
-                      </Button>
-                    </div>
+                    {this.state.fromLogin ? (
+                      <Alert variant='warning'>
+                        "We cannot find users with this credentials"
+                      </Alert>
+                    ) : (
+                      <div className='d-flex justify-content-center'>
+                        <Button
+                          variant='info'
+                          onClick={() =>
+                            this.setState({ login: false, signup: true })
+                          }
+                        >
+                          Create a new User
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </>
               ) : null}
@@ -251,6 +271,16 @@ class Login extends Component {
                         id='surname'
                         type='text'
                         value={this.state.profile.surname}
+                        onChange={(e) => this.handleChangeProfile(e)}
+                      />
+                    </FormGroup>
+                    <FormGroup controlId='about' bsSize='large'>
+                      <label>About You</label>
+                      <FormControl
+                        autoFocus
+                        id='about'
+                        type='text'
+                        value={this.state.profile.about}
                         onChange={(e) => this.handleChangeProfile(e)}
                       />
                     </FormGroup>

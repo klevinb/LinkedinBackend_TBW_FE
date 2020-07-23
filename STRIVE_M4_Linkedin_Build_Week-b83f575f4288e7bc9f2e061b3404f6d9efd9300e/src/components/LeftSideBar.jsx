@@ -47,7 +47,9 @@ export class SideBar extends Component {
                   </h5>
 
                   <div className='text-center'>
-                    <Link to='/profiles/me'>Update your profile</Link>
+                    <Link to={`/profiles/${this.props.info.username}`}>
+                      Update your profile
+                    </Link>
                   </div>
                 </Container>
               </Jumbotron>
