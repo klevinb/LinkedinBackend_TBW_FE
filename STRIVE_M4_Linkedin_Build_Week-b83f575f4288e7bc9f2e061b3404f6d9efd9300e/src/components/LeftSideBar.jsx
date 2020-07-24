@@ -29,11 +29,15 @@ export class SideBar extends Component {
               >
                 <Container style={{ position: "relative", padding: "0" }}>
                   <div id='jumbotronLeftSide'>
-                    <Image
-                      fluid
-                      className='w-100'
-                      src='/assets/jumbotronCover.jpeg'
-                    />
+                    {this.props.info.cover ? (
+                      <Image className='w-100' src={this.props.info.cover} />
+                    ) : (
+                      <Image
+                        fluid
+                        className='w-100'
+                        src='/assets/jumbotronCover.jpeg'
+                      />
+                    )}
                   </div>
                   <div id='profilePhotoLeftSideBar'>
                     {this.props.info.image ? (

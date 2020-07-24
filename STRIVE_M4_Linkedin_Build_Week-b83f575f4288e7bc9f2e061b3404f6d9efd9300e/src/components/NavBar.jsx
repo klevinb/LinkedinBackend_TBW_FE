@@ -70,7 +70,7 @@ class NavBar extends Component {
 
                   {this.props.userImage.length > 0 ? (
                     <Image
-                      src={this.props.userImage}
+                      src={this.props.userImage[0].image}
                       style={{
                         width: "25px",
                         height: "25px",
@@ -106,7 +106,7 @@ class NavBar extends Component {
                       }
                       style={{ color: "red" }}
                     >
-                      <Link to='/'>Log Out</Link>
+                      <Link to=''>Log Out</Link>
                     </NavDropdown.Item>
                   </NavDropdown>
 

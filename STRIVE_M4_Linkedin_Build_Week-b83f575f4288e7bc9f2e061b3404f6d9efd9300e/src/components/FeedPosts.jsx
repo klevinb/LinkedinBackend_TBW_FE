@@ -33,10 +33,21 @@ class FeedPosts extends Component {
       });
       this.props.reFetchData();
     } else {
-      alert("This is not your post!");
       this.setState({
         showDropdown: false,
       });
+    }
+  };
+
+  deleteComment = async (id) => {
+    const resp = await fetch(apiKey + "/api/comments/" + id, {
+      method: "DELETE",
+      headers: new Headers({
+        Authorization: "Bearer " + this.props.authoKey,
+      }),
+    });
+    if (resp.ok) {
+      this.fetchComments();
     }
   };
 
@@ -49,32 +60,70 @@ class FeedPosts extends Component {
   };
   keyPressed = async (event) => {
     if (event.key === "Enter") {
-      const commentsUrl = apiKey + "/api/comments/";
-      const response = await fetch(commentsUrl, {
-        method: "POST",
-        body: JSON.stringify(this.state.newComment),
-        headers: new Headers({
-          "Authorization": "Bearer " + this.props.authoKey,
-          "Content-Type": "application/json",
-        }),
-      });
-      if (response.ok) {
-        this.setState({
-          newComment: {
-            comment: "",
-            user: this.props.userImage[0]._id,
-            postid: this.props.info._id,
-          },
+      if (this.state.newComment._id) {
+        const commentsUrl =
+          apiKey + "/api/comments/" + this.state.newComment._id;
+        const response = await fetch(commentsUrl, {
+          method: "PUT",
+          body: JSON.stringify(this.state.newComment),
+          headers: new Headers({
+            "Authorization": "Bearer " + this.props.authoKey,
+            "Content-Type": "application/json",
+          }),
         });
-        this.fetchComments();
+        if (response.ok) {
+          this.setState({
+            newComment: {
+              comment: "",
+              user: this.props.userImage[0]._id,
+              postid: this.props.info._id,
+            },
+          });
+          this.fetchComments();
+        } else {
+          alert("An error has occurred");
+        }
       } else {
-        alert("An error has occurred");
+        const commentsUrl = apiKey + "/api/comments/";
+        const response = await fetch(commentsUrl, {
+          method: "POST",
+          body: JSON.stringify(this.state.newComment),
+          headers: new Headers({
+            "Authorization": "Bearer " + this.props.authoKey,
+            "Content-Type": "application/json",
+          }),
+        });
+        if (response.ok) {
+          this.setState({
+            newComment: {
+              comment: "",
+              user: this.props.userImage[0]._id,
+              postid: this.props.info._id,
+            },
+          });
+          this.fetchComments();
+        } else {
+          alert("An error has occurred");
+        }
       }
     }
   };
 
+  getSingleComment = async (id) => {
+    const commentsUrl = apiKey + "/api/comments/" + id;
+    let resp = await fetch(commentsUrl);
+    if (resp.ok) {
+      const comment = await resp.json();
+      this.setState({ newComment: comment });
+    }
+  };
+
+  editComment = (id) => {
+    this.getSingleComment(id);
+  };
+
   fetchComments = async () => {
-    const commentsUrl = apiKey + "/api/comments/";
+    const commentsUrl = apiKey + "/api/comments/posts/";
     const resp = await fetch(commentsUrl + this.props.info._id, {
       headers: new Headers({
         Authorization: "Bearer " + this.props.authoKey,
@@ -94,6 +143,10 @@ class FeedPosts extends Component {
     if (prevState.comments !== this.state.comments) {
       this.setState({
         comments: this.state.comments,
+      });
+    } else if (prevProps !== this.props) {
+      this.setState({
+        showDropdown: false,
       });
     }
   };
@@ -138,16 +191,17 @@ class FeedPosts extends Component {
               </div>
               <div className='dropDownMenu'>
                 <Dropdown.Menu show={this.state.showDropdown}>
-                  <Dropdown.Item onSelect={() => console.log("Edit")}>
+                  <Dropdown.Item
+                    onSelect={() =>
+                      this.props.getSinglePost(this.props.info._id)
+                    }
+                  >
                     Edit
                   </Dropdown.Item>
                   <Dropdown.Item
                     onSelect={() => this.deletePost(this.props.info._id)}
                   >
                     Delete
-                  </Dropdown.Item>
-                  <Dropdown.Item onSelect={() => console.log("Something else")}>
-                    Something else
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </div>
@@ -244,6 +298,39 @@ class FeedPosts extends Component {
                                 </h6>
                                 {comment.comment}
                               </div>
+                              {this.props.userImage[0].username ===
+                                comment.user.username && (
+                                <>
+                                  <div className=''>
+                                    <Dropdown>
+                                      <Dropdown.Toggle
+                                        variant='warning'
+                                        id='dropdown-basic'
+                                      ></Dropdown.Toggle>
+
+                                      <Dropdown.Menu className='text-center'>
+                                        <a
+                                          className='dropdown-item'
+                                          onClick={() =>
+                                            this.editComment(comment._id)
+                                          }
+                                        >
+                                          Edit
+                                        </a>
+
+                                        <a
+                                          className='dropdown-item'
+                                          onClick={() =>
+                                            this.deleteComment(comment._id)
+                                          }
+                                        >
+                                          Delete
+                                        </a>
+                                      </Dropdown.Menu>
+                                    </Dropdown>
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </>
                         ))}

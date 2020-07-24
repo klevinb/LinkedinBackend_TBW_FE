@@ -47,6 +47,14 @@ class Feed extends Component {
       );
   };
 
+  getSinglePost = async (id) => {
+    let resp = await fetch(apiKey + "/api/posts/" + id);
+    if (resp.ok) {
+      const post = await resp.json();
+      this.setState({ newPost: post, showModal: true });
+    }
+  };
+
   saveImg = (event) => {
     let photo = new FormData();
     photo.append("avatar", event.target.files[0]);
@@ -78,27 +86,60 @@ class Feed extends Component {
   };
 
   postNewPost = async () => {
-    const resp = await fetch(apiKey + "/api/posts/", {
-      method: "POST",
-      body: JSON.stringify(this.state.newPost),
-      headers: new Headers({
-        "Authorization": "Bearer " + this.props.authoKey,
-        "Content-Type": "application/json",
-      }),
-    });
+    const id = this.state.newPost._id;
 
-    if (resp.ok) this.setState({ showModal: false });
-    const id = await resp.json();
+    if (this.state.newPost._id) {
+      const resp = await fetch(apiKey + "/api/posts/" + id, {
+        method: "PUT",
+        body: JSON.stringify(this.state.newPost),
+        headers: new Headers({
+          "Authorization": "Bearer " + this.props.authoKey,
+          "Content-Type": "application/json",
+        }),
+      });
+      if (resp.ok) {
+        this.setState({
+          showModal: false,
+          newPost: {
+            text: "",
+            username: this.props.username,
+          },
+        });
+        this.fetchPosts();
+      }
 
-    const resp2 = await fetch(apiKey + "/api/posts/" + id + "/upload", {
-      method: "POST",
-      body: this.state.image,
-      headers: new Headers({
-        Authorization: "Bearer " + this.props.authoKey,
-      }),
-    });
+      const resp2 = await fetch(apiKey + "/api/posts/" + id + "/upload", {
+        method: "POST",
+        body: this.state.image,
+        headers: new Headers({
+          Authorization: "Bearer " + this.props.authoKey,
+        }),
+      });
 
-    if (resp2.ok) this.fetchPosts();
+      if (resp2.ok) this.fetchPosts();
+    } else {
+      const resp = await fetch(apiKey + "/api/posts/", {
+        method: "POST",
+        body: JSON.stringify(this.state.newPost),
+        headers: new Headers({
+          "Authorization": "Bearer " + this.props.authoKey,
+          "Content-Type": "application/json",
+        }),
+      });
+
+      if (resp.ok) this.setState({ showModal: false });
+      const id = await resp.json();
+
+      const resp2 = await fetch(apiKey + "/api/posts/" + id + "/upload", {
+        method: "POST",
+        body: this.state.image,
+        headers: new Headers({
+          Authorization: "Bearer " + this.props.authoKey,
+        }),
+      });
+
+      if (resp2.ok) this.fetchPosts();
+    }
   };
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.feeds !== this.state.feeds) {
@@ -143,6 +184,7 @@ class Feed extends Component {
                     this.state.feeds.map((post, i) => (
                       <>
                         <FeedPosts
+                          getSinglePost={this.getSinglePost}
                           key={post._id}
                           reFetchData={this.reFetchData}
                           users={this.props.users}
@@ -163,7 +205,15 @@ class Feed extends Component {
         )}
         <Modal
           show={this.state.showModal}
-          onHide={() => this.setState({ showModal: false })}
+          onHide={() =>
+            this.setState({
+              showModal: false,
+              newPost: {
+                text: "",
+                username: this.props.username,
+              },
+            })
+          }
         >
           <Modal.Header closeButton>
             <Modal.Title>Create a post</Modal.Title>
@@ -172,6 +222,7 @@ class Feed extends Component {
             <FormControl
               type='text'
               onChange={this.newPostHandler}
+              value={this.state.newPost.text}
               placeholder='What do you want to talk about?'
               className='mr-sm-2'
             />

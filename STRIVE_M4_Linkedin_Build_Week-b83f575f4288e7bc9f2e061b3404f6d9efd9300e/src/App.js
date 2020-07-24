@@ -88,7 +88,12 @@ class App extends Component {
               setSearch={this.setSearch}
               searchValue={this.state.search}
               status={this.state.show}
-              userImage={this.state.userImg}
+              userImage={
+                this.state.users.length > 0 &&
+                this.state.users.filter(
+                  (user) => user.username === this.props.username
+                )
+              }
               changeStatus={this.changeStatus}
               users={
                 this.state.users &&
