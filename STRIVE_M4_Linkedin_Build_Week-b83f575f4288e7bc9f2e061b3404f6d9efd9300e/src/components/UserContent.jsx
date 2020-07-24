@@ -1,6 +1,4 @@
 import React from "react";
-import { Col } from "react-bootstrap";
-import { RiPencilLine } from "react-icons/ri";
 
 function UserContent(props) {
   return (
@@ -8,9 +6,6 @@ function UserContent(props) {
       <div className='mainContent p-4 mt-5 mb-4 box-shadow '>
         <div className='d-flex justify-content-between'>
           <h4>About</h4>
-          <div>
-            {props.profileInfo.username === props.username && <RiPencilLine />}
-          </div>
         </div>
         <div>
           {props.profileInfo.about ? (

@@ -184,6 +184,7 @@ class Feed extends Component {
                     this.state.feeds.map((post, i) => (
                       <>
                         <FeedPosts
+                          username={this.props.username}
                           getSinglePost={this.getSinglePost}
                           key={post._id}
                           reFetchData={this.reFetchData}

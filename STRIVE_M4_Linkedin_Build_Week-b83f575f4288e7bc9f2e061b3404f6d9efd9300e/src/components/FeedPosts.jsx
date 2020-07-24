@@ -15,7 +15,7 @@ class FeedPosts extends Component {
     comments: [],
     newComment: {
       comment: "",
-      user: this.props.userImage[0]._id,
+      user: this.props.username,
       postid: this.props.info._id,
     },
   };
@@ -75,7 +75,7 @@ class FeedPosts extends Component {
           this.setState({
             newComment: {
               comment: "",
-              user: this.props.userImage[0]._id,
+              user: this.props.username,
               postid: this.props.info._id,
             },
           });
@@ -97,7 +97,7 @@ class FeedPosts extends Component {
           this.setState({
             newComment: {
               comment: "",
-              user: this.props.userImage[0]._id,
+              user: this.props.username,
               postid: this.props.info._id,
             },
           });
@@ -132,6 +132,22 @@ class FeedPosts extends Component {
     if (resp.ok) {
       const comments = await resp.json();
       this.setState({ comments });
+    }
+  };
+
+  addLike = async (id) => {
+    let resp = await fetch(
+      apiKey + "/api/posts/add/" + this.props.info._id + "/like/" + id,
+      {
+        method: "POST",
+        headers: new Headers({
+          Authorization: "Bearer " + this.props.authoKey,
+        }),
+      }
+    );
+    if (resp.ok) {
+      this.setState({ clicked: !this.state.clicked });
+      this.props.reFetchData();
     }
   };
 
@@ -178,7 +194,7 @@ class FeedPosts extends Component {
               {this.props.info.createdAt.slice(11, 19)}
             </label>
           </div>
-          {this.props.userImage[0].username === this.props.info.username && (
+          {this.props.username === this.props.info.username && (
             <>
               <div className='postOptions'>
                 <div
@@ -209,27 +225,22 @@ class FeedPosts extends Component {
           )}
         </div>
         <div className='postImage p-3'>
-          {this.props.info.text}
+          <p style={{ wordWrap: "break-word" }}>{this.props.info.text}</p>
           {this.props.info.image && <Image src={this.props.info.image} />}
         </div>
         <div className='p-3'>
           <hr></hr>
+          <p>{this.props.info.likes.length} person likes this post</p>
           <Accordion defaultActiveKey=''>
             <div className='commentIcons d-flex'>
-              {this.state.clicked ? (
-                <div
-                  onClick={() =>
-                    this.setState({ clicked: !this.state.clicked })
-                  }
-                >
+              {this.props.info.likes.find(
+                (user) => user.username == this.props.username
+              ) !== undefined ? (
+                <div onClick={() => this.addLike(this.props.userImage[0]._id)}>
                   <AiFillLike /> Liked
                 </div>
               ) : (
-                <div
-                  onClick={() =>
-                    this.setState({ clicked: !this.state.clicked })
-                  }
-                >
+                <div onClick={() => this.addLike(this.props.userImage[0]._id)}>
                   <AiOutlineLike /> Like
                 </div>
               )}
@@ -298,7 +309,7 @@ class FeedPosts extends Component {
                                 </h6>
                                 {comment.comment}
                               </div>
-                              {this.props.userImage[0].username ===
+                              {this.props.username ===
                                 comment.user.username && (
                                 <>
                                   <div className=''>

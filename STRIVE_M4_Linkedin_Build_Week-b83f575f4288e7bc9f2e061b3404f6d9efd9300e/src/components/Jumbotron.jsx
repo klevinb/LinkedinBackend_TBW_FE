@@ -18,6 +18,7 @@ class JumBotron extends Component {
       email: this.props.profileInfo.email,
       bio: this.props.profileInfo.bio,
       title: this.props.profileInfo.title,
+      about: this.props.profileInfo.about,
       area: this.props.profileInfo.area,
     },
     editProfile: false,
@@ -67,10 +68,10 @@ class JumBotron extends Component {
     });
 
     if (resp.ok) {
-      alert("You just edited your profile!");
       this.setState({ editProfile: false });
+      this.handleUpload();
+      this.props.refetch();
     }
-    this.handleUpload();
   };
 
   addData = (event) => {
@@ -267,7 +268,7 @@ class JumBotron extends Component {
                 onSubmit={this.editProfileInfo}
               >
                 <Row>
-                  <Col md={6}>
+                  <Col md={5}>
                     <Form.Group controlId='name'>
                       <Form.Label>Name</Form.Label>
                       <Form.Control
@@ -287,7 +288,7 @@ class JumBotron extends Component {
                       />
                     </Form.Group>
                   </Col>
-                  <Col md={6}>
+                  <Col md={7}>
                     <Form.Group controlId='title'>
                       <Form.Label>Title</Form.Label>
                       <Form.Control
@@ -307,7 +308,7 @@ class JumBotron extends Component {
                       />
                     </Form.Group>
                   </Col>
-                  <Col md={12}>
+                  <Col md={5}>
                     <Form.Group controlId='bio'>
                       <Form.Label>Bio</Form.Label>
                       <Form.Control
@@ -317,6 +318,17 @@ class JumBotron extends Component {
                         onChange={this.addData}
                       />
                     </Form.Group>
+                    <label>Image</label>
+                    <input
+                      style={{ color: "transparent" }}
+                      type='file'
+                      id='image'
+                      profile='file'
+                      onChange={this.saveImg}
+                      accept='image/*'
+                    />
+                  </Col>
+                  <Col md={7}>
                     <Form.Group controlId='email'>
                       <Form.Label>Email</Form.Label>
                       <Form.Control
@@ -326,14 +338,15 @@ class JumBotron extends Component {
                         onChange={this.addData}
                       />
                     </Form.Group>
-                    <label>Image</label>
-                    <input
-                      type='file'
-                      id='image'
-                      profile='file'
-                      onChange={this.saveImg}
-                      accept='image/*'
-                    />
+                    <Form.Group controlId='about'>
+                      <Form.Label>About</Form.Label>
+                      <Form.Control
+                        type='text'
+                        placeholder='About'
+                        value={this.state.profileInfo.about}
+                        onChange={this.addData}
+                      />
+                    </Form.Group>
                   </Col>
                 </Row>
                 <br></br>

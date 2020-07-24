@@ -7,15 +7,16 @@ import {
   Image,
   Alert,
   Row,
-  Col
+  Col,
 } from "react-bootstrap";
 
-import {FiUpload} from "react-icons/fi"
+import { FiUpload } from "react-icons/fi";
 
 const apiKey = process.env.REACT_APP_API;
 
 class Login extends Component {
   state = {
+    photo: null,
     user: {
       username: "",
       password: "",
@@ -48,6 +49,22 @@ class Login extends Component {
     this.setState({
       user,
     });
+  };
+
+  handleUpload = async () => {
+    const photo = new FormData();
+    photo.append("profile", this.state.photo);
+
+    const resp = await fetch(
+      apiKey + "/api/profile/" + this.state.profile.username + "/upload",
+      {
+        method: "POST",
+        body: photo,
+        headers: new Headers({
+          Authorization: "Bearer " + this.state.token,
+        }),
+      }
+    );
   };
 
   setPassword = (e) => {
@@ -125,6 +142,14 @@ class Login extends Component {
     }
   };
 
+  addPhoto = (e) => {
+    const photo = e.target.files[0];
+
+    this.setState({
+      photo,
+    });
+  };
+
   addNewProfile = async (e) => {
     e.preventDefault();
     const resp = await fetch(apiKey + "/api/profile", {
@@ -135,7 +160,21 @@ class Login extends Component {
         "Content-Type": "application/json",
       }),
     });
-    if (resp.ok) {
+    const photo = new FormData();
+    photo.append("profile", this.state.photo);
+    const user = await resp.json();
+
+    const resp2 = await fetch(
+      apiKey + "/api/profile/" + user.username + "/upload",
+      {
+        method: "POST",
+        body: photo,
+        headers: new Headers({
+          Authorization: "Bearer " + this.state.token,
+        }),
+      }
+    );
+    if (resp2.ok) {
       this.props.getAuthorization(
         this.state.token,
         this.state.profile.username
@@ -255,89 +294,104 @@ class Login extends Component {
                 </form>
               </div>
             ) : (
-              <div style={{marginTop:"35vh"}}>
-                
+              <div style={{ marginTop: "35vh" }}>
                 <Container className='d-flex justify-content-center'>
-                   <Row>
-                     <Col className="d-flex align-items-center mr-5">
-                        <FiUpload style={{fontSize:"55px", color:"#0073B1"}}/>
-                     </Col>
-                      <form onSubmit={this.addNewProfile}>
-                        <Container>
-                        <Image src="https://cdn.worldvectorlogo.com/logos/linkedin.svg" className="mb-3" style={{width:"150px"}}/>
-                          <Row>
-                              <Col>
-                              <FormGroup controlId='name' bsSize='large'>
-                                <label>Name</label>
-                                <FormControl
-                                  autoFocus
-                                  id='name'
-                                  type='text'
-                                  value={this.state.profile.name}
-                                  onChange={(e) => this.handleChangeProfile(e)}
-                                />
-                              </FormGroup>
-                              <FormGroup controlId='surname' bsSize='large'>
-                                <label>Surname</label>
-                                <FormControl
-                                  autoFocus
-                                  id='surname'
-                                  type='text'
-                                  value={this.state.profile.surname}
-                                  onChange={(e) => this.handleChangeProfile(e)}
-                                />
-                              </FormGroup>
-                              <FormGroup controlId='about' bsSize='large'>
-                                <label>About You</label>
-                                <FormControl
-                                  autoFocus
-                                  id='about'
-                                  type='text'
-                                  value={this.state.profile.about}
-                                  onChange={(e) => this.handleChangeProfile(e)}
-                                />
-                              </FormGroup>
-                              </Col>
-                              <Col>
-                              <FormGroup controlId='bio' bsSize='large'>
-                                <label>Bio</label>
-                                <FormControl
-                                  autoFocus
-                                  id='bio'
-                                  type='text'
-                                  value={this.state.profile.bio}
-                                  onChange={(e) => this.handleChangeProfile(e)}
-                                />
-                              </FormGroup>
-                              <FormGroup controlId='title' bsSize='large'>
-                                <label>Title</label>
-                                <FormControl
-                                  autoFocus
-                                  id='title'
-                                  type='text'
-                                  value={this.state.profile.title}
-                                  onChange={(e) => this.handleChangeProfile(e)}
-                                />
-                              </FormGroup>
-                              <FormGroup controlId='area' bsSize='large'>
-                                <label>Area</label>
-                                <FormControl
-                                  autoFocus
-                                  id='area'
-                                  type='text'
-                                  value={this.state.profile.area}
-                                  onChange={(e) => this.handleChangeProfile(e)}
-                                />
-                              </FormGroup>
-                              </Col>
-                            </Row>
-                            <Button block bsSize='small' type='submit'>
-                                Add Info
-                              </Button>
-                          </Container>
-                      </form>
-                      </Row>
-                  </Container>
+                  <Row>
+                    <Col className='d-flex align-items-center mr-5'>
+                      <label htmlFor='profilePhoto'>
+                        <FiUpload
+                          style={{ fontSize: "55px", color: "#0073B1" }}
+                        />
+                      </label>
+                    </Col>
+                    <form onSubmit={this.addNewProfile}>
+                      <input
+                        style={{ display: "none" }}
+                        type='file'
+                        id='profilePhoto'
+                        profile='file'
+                        onChange={(e) => this.addPhoto(e)}
+                        accept='image/*'
+                      />
+                      <Container>
+                        <Image
+                          src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'
+                          className='mb-3'
+                          style={{ width: "150px" }}
+                        />
+                        <Row>
+                          <Col>
+                            <FormGroup controlId='name' bsSize='large'>
+                              <label>Name</label>
+                              <FormControl
+                                autoFocus
+                                id='name'
+                                type='text'
+                                value={this.state.profile.name}
+                                onChange={(e) => this.handleChangeProfile(e)}
+                              />
+                            </FormGroup>
+                            <FormGroup controlId='surname' bsSize='large'>
+                              <label>Surname</label>
+                              <FormControl
+                                autoFocus
+                                id='surname'
+                                type='text'
+                                value={this.state.profile.surname}
+                                onChange={(e) => this.handleChangeProfile(e)}
+                              />
+                            </FormGroup>
+                            <FormGroup controlId='about' bsSize='large'>
+                              <label>About You</label>
+                              <FormControl
+                                autoFocus
+                                id='about'
+                                type='text'
+                                value={this.state.profile.about}
+                                onChange={(e) => this.handleChangeProfile(e)}
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col>
+                            <FormGroup controlId='bio' bsSize='large'>
+                              <label>Bio</label>
+                              <FormControl
+                                autoFocus
+                                id='bio'
+                                type='text'
+                                value={this.state.profile.bio}
+                                onChange={(e) => this.handleChangeProfile(e)}
+                              />
+                            </FormGroup>
+                            <FormGroup controlId='title' bsSize='large'>
+                              <label>Title</label>
+                              <FormControl
+                                autoFocus
+                                id='title'
+                                type='text'
+                                value={this.state.profile.title}
+                                onChange={(e) => this.handleChangeProfile(e)}
+                              />
+                            </FormGroup>
+                            <FormGroup controlId='area' bsSize='large'>
+                              <label>Area</label>
+                              <FormControl
+                                autoFocus
+                                id='area'
+                                type='text'
+                                value={this.state.profile.area}
+                                onChange={(e) => this.handleChangeProfile(e)}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Button block bsSize='small' type='submit'>
+                          Add Info
+                        </Button>
+                      </Container>
+                    </form>
+                  </Row>
+                </Container>
               </div>
             )}
           </>
