@@ -258,12 +258,9 @@ class Login extends Component {
               <div style={{marginTop:"35vh"}}>
                 
                 <Container className='d-flex justify-content-center'>
-                
                    <Row>
                      <Col className="d-flex align-items-center mr-5">
-                        
                         <FiUpload style={{fontSize:"55px", color:"#0073B1"}}/>
-                        
                      </Col>
                       <form onSubmit={this.addNewProfile}>
                         <Container>
