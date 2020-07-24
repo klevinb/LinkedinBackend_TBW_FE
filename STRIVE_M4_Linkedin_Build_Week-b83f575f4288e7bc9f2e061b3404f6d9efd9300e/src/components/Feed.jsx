@@ -143,12 +143,12 @@ class Feed extends Component {
                     this.state.feeds.map((post, i) => (
                       <>
                         <FeedPosts
+                          key={post._id}
                           reFetchData={this.reFetchData}
-                          key={post.user._id}
                           users={this.props.users}
                           authoKey={this.props.authoKey}
-                          key={i}
                           loading={this.state.loading}
+                          userImage={this.props.userImage}
                           info={post}
                         />
                       </>

@@ -14,9 +14,9 @@ class FeedPosts extends Component {
     showDropdown: false,
     comments: [],
     newComment: {
-      rate: "5",
       comment: "",
-      elementId: this.props.info._id,
+      user: this.props.userImage[0]._id,
+      postid: this.props.info._id,
     },
   };
 
@@ -62,24 +62,40 @@ class FeedPosts extends Component {
         this.setState({
           newComment: {
             comment: "",
-            rate: "5",
-            elementId: this.props.info._id,
+            user: this.props.userImage[0]._id,
+            postid: this.props.info._id,
           },
         });
+        this.fetchComments();
       } else {
         alert("An error has occurred");
       }
     }
   };
 
-  componentDidMount = async () => {
+  fetchComments = async () => {
     const commentsUrl = apiKey + "/api/comments/";
-    const comments = await fetch(commentsUrl + this.props.info._id, {
+    const resp = await fetch(commentsUrl + this.props.info._id, {
       headers: new Headers({
         Authorization: "Bearer " + this.props.authoKey,
       }),
-    }).then((response) => response.json());
-    this.setState({ comments });
+    });
+    if (resp.ok) {
+      const comments = await resp.json();
+      this.setState({ comments });
+    }
+  };
+
+  componentDidMount = async () => {
+    this.fetchComments();
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.comments !== this.state.comments) {
+      this.setState({
+        comments: this.state.comments,
+      });
+    }
   };
 
   render() {
@@ -87,7 +103,7 @@ class FeedPosts extends Component {
       <div className='postContent box-shadow  mb-2'>
         <div className='postHeader d-flex align-items-center p-3'>
           <div className='imgSmall mr-3'>
-            {console.log(this.props.info)}
+            {console.log(this.props.info.user.image)}
             {this.props.info.user.image ? (
               <Link to={"/profiles/" + this.props.info.user.username}>
                 <Image fluid src={this.props.info.user.image} />
@@ -188,12 +204,13 @@ class FeedPosts extends Component {
                       onChange={this.addComment}
                       onKeyPress={this.keyPressed}
                       type='text'
+                      value={this.state.newComment.comment}
                       placeholder='Write a new comment'
                     />
                   </div>
                 </div>
                 <div className='mt-3 mr-3'>
-                  {this.state.comments && this.props.users && (
+                  {this.state.comments.length > 0 && this.props.users && (
                     <>
                       <div>
                         {this.state.comments.map((comment, i) => (
@@ -203,7 +220,8 @@ class FeedPosts extends Component {
                                 <Image
                                   src={
                                     this.props.users.find(
-                                      (user) => user.username === comment.author
+                                      (user) =>
+                                        user.username === comment.user.username
                                     ).image
                                   }
                                 />
@@ -211,11 +229,13 @@ class FeedPosts extends Component {
                               <div className='inputComment ml-3'>
                                 <h6>
                                   {this.props.users.find(
-                                    (user) => user.username === comment.author
+                                    (user) =>
+                                      user.username === comment.user.username
                                   ).name + " "}
                                   {
                                     this.props.users.find(
-                                      (user) => user.username === comment.author
+                                      (user) =>
+                                        user.username === comment.user.username
                                     ).surname
                                   }
                                 </h6>

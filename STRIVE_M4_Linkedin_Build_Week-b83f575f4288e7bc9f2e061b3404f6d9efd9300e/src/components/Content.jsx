@@ -13,6 +13,7 @@ const apiKey = process.env.REACT_APP_API;
 class Content extends Component {
   state = {
     userInfo: "",
+
     userId: this.props.match.params.userID,
     loading: true,
   };
@@ -91,11 +92,19 @@ class Content extends Component {
                   username={this.props.username}
                   profileInfo={this.state.userInfo}
                 />
-                <Experiences
-                  username={this.props.username}
-                  authoKey={this.props.authoKey}
-                  userID={this.state.userId}
-                />
+                {this.state.userId === "me" ? (
+                  <Experiences
+                    username={this.props.username}
+                    authoKey={this.props.authoKey}
+                    userID={this.props.username}
+                  />
+                ) : (
+                  <Experiences
+                    username={this.props.username}
+                    authoKey={this.props.authoKey}
+                    userID={this.state.userId}
+                  />
+                )}
               </Col>
               <Col md={3} className='sideContent pl-4 pt-4'>
                 <SideContent

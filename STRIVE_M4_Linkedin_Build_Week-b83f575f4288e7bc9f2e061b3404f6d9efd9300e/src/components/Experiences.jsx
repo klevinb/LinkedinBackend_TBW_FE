@@ -8,7 +8,7 @@ const apiKey = process.env.REACT_APP_API;
 
 class Experiences extends Component {
   state = {
-    userData: "",
+    userExperiences: "",
     userID: this.props.userID,
     showModal: false,
     addExperience: false,
@@ -104,7 +104,7 @@ class Experiences extends Component {
             Authorization: "Basic " + this.props.authoKey,
           }),
         }
-      ).then(await this.fetchUserData()),
+      ).then(await this.fetchuserExperiences()),
     ])
       .then(
         this.setState({
@@ -143,7 +143,7 @@ class Experiences extends Component {
           username: this.props.userID,
         },
       });
-      await this.fetchUserData();
+      await this.fetchuserExperiences();
     }
   };
 
@@ -162,9 +162,17 @@ class Experiences extends Component {
       }
     );
 
+    if (resp.ok) {
+      this.setState({
+        showModal: false,
+        addExperience: false,
+        editExperience: false,
+      });
+    }
+
     const id = await resp.json();
 
-    let reps2 = await fetch(
+    let resp2 = await fetch(
       apiKey +
         "/api/profile/" +
         this.props.userID +
@@ -180,17 +188,12 @@ class Experiences extends Component {
       }
     );
 
-    if (reps2.ok) {
-      this.setState({
-        showModal: false,
-        addExperience: false,
-        editExperience: false,
-      });
-      await this.fetchUserData();
+    if (resp2.ok) {
+      this.fetchuserExperiences();
     }
   };
 
-  fetchUserData = async () => {
+  fetchuserExperiences = async () => {
     await fetch(apiKey + "/api/profile/" + this.props.userID + "/experiences", {
       headers: new Headers({
         "Authorization": "Basic " + this.props.authoKey,
@@ -200,13 +203,13 @@ class Experiences extends Component {
       .then((resp) => resp.json())
       .then((respObj) =>
         this.setState({
-          userData: respObj,
+          userExperiences: respObj,
         })
       );
   };
 
   componentDidMount = async () => {
-    this.fetchUserData();
+    this.fetchuserExperiences();
   };
 
   componentDidUpdate = async (prevProps, prevState) => {
@@ -224,9 +227,13 @@ class Experiences extends Component {
           .then((resp) => resp.json())
           .then((respObj) =>
             this.setState({
-              userData: respObj,
+              userExperiences: respObj,
             })
           );
+      });
+    } else if (prevState.userExperiences !== this.state.userExperiences) {
+      this.setState({
+        userExperiences: this.state.userExperiences,
       });
     }
   };
@@ -277,8 +284,8 @@ class Experiences extends Component {
               </div>
             </div>
           </div>
-          {this.state.userData &&
-            this.state.userData.map((user, i) => (
+          {this.state.userExperiences &&
+            this.state.userExperiences.map((user, i) => (
               <div key={i} className='pt-4'>
                 <div
                   id='experienceContent'
