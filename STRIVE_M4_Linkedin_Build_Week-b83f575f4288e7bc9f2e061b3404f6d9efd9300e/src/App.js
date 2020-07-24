@@ -70,6 +70,15 @@ class App extends Component {
     }
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.userImg !== this.state.userImg) {
+      this.setState({
+        userImg: this.state.userImg,
+      });
+      this.fetchUser();
+    }
+  };
+
   render() {
     return (
       <Router>
@@ -79,12 +88,7 @@ class App extends Component {
               setSearch={this.setSearch}
               searchValue={this.state.search}
               status={this.state.show}
-              userImage={
-                this.state.users &&
-                this.state.users.filter(
-                  (user) => user.username === this.props.username
-                )
-              }
+              userImage={this.state.userImg}
               changeStatus={this.changeStatus}
               users={
                 this.state.users &&

@@ -13,7 +13,6 @@ const apiKey = process.env.REACT_APP_API;
 class Content extends Component {
   state = {
     userInfo: "",
-
     userId: this.props.match.params.userID,
     loading: true,
   };
@@ -32,6 +31,7 @@ class Content extends Component {
         userInfo: respObj,
         loading: false,
       });
+      this.props.getUserImg(this.state.userInfo.image);
     }
   };
 
@@ -55,8 +55,9 @@ class Content extends Component {
     }
   };
 
-  refetch = () => {
-    this.fetchFunction();
+  refetch = async () => {
+    await this.fetchFunction();
+    this.props.getUserImg(this.state.userInfo.image);
   };
 
   componentDidMount = () => {

@@ -11,7 +11,7 @@ class SideContent extends React.Component {
     users: [],
   };
 
-  componentDidMount = async () => {
+  fetchUsers = async () => {
     const url = apiKey + "/api/profile/";
 
     let resp = await fetch(apiKey + "/api/profile/", {
@@ -26,6 +26,16 @@ class SideContent extends React.Component {
       this.setState({
         users: data.data,
       });
+    }
+  };
+
+  componentDidMount = async () => {
+    this.fetchUsers();
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps !== this.props) {
+      this.fetchUsers();
     }
   };
 

@@ -70,7 +70,7 @@ class NavBar extends Component {
 
                   {this.props.userImage.length > 0 ? (
                     <Image
-                      src={this.props.userImage[0].image}
+                      src={this.props.userImage}
                       style={{
                         width: "25px",
                         height: "25px",

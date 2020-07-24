@@ -23,7 +23,6 @@ class JumBotron extends Component {
     editProfile: false,
   };
   handleUpload = async () => {
-    console.log("here");
     const photo = new FormData();
     photo.append("profile", this.state.profile);
 
