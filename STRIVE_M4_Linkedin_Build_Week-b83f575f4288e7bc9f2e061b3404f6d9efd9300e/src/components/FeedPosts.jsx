@@ -103,7 +103,6 @@ class FeedPosts extends Component {
       <div className='postContent box-shadow  mb-2'>
         <div className='postHeader d-flex align-items-center p-3'>
           <div className='imgSmall mr-3'>
-            {console.log(this.props.info.user.image)}
             {this.props.info.user.image ? (
               <Link to={"/profiles/" + this.props.info.user.username}>
                 <Image fluid src={this.props.info.user.image} />
@@ -126,30 +125,34 @@ class FeedPosts extends Component {
               {this.props.info.createdAt.slice(11, 19)}
             </label>
           </div>
-          <div className='postOptions'>
-            <div
-              onClick={() =>
-                this.setState({ showDropdown: !this.state.showDropdown })
-              }
-            >
-              <BsThreeDots />
-            </div>
-          </div>
-          <div className='dropDownMenu'>
-            <Dropdown.Menu show={this.state.showDropdown}>
-              <Dropdown.Item onSelect={() => console.log("Edit")}>
-                Edit
-              </Dropdown.Item>
-              <Dropdown.Item
-                onSelect={() => this.deletePost(this.props.info._id)}
-              >
-                Delete
-              </Dropdown.Item>
-              <Dropdown.Item onSelect={() => console.log("Something else")}>
-                Something else
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </div>
+          {this.props.userImage[0].username === this.props.info.username && (
+            <>
+              <div className='postOptions'>
+                <div
+                  onClick={() =>
+                    this.setState({ showDropdown: !this.state.showDropdown })
+                  }
+                >
+                  <BsThreeDots />
+                </div>
+              </div>
+              <div className='dropDownMenu'>
+                <Dropdown.Menu show={this.state.showDropdown}>
+                  <Dropdown.Item onSelect={() => console.log("Edit")}>
+                    Edit
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onSelect={() => this.deletePost(this.props.info._id)}
+                  >
+                    Delete
+                  </Dropdown.Item>
+                  <Dropdown.Item onSelect={() => console.log("Something else")}>
+                    Something else
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </div>
+            </>
+          )}
         </div>
         <div className='postImage p-3'>
           {this.props.info.text}

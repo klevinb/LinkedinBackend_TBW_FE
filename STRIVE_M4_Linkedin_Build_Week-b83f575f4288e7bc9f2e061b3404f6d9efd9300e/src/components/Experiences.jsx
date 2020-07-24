@@ -73,48 +73,48 @@ class Experiences extends Component {
 
   editTheExperience = async (e) => {
     e.preventDefault();
-    Promise.all([
-      fetch(
-        apiKey +
-          "/api/profile/" +
-          this.props.userID +
-          "/experiences/" +
-          this.state.editElementId,
-        {
-          method: "PUT",
-          body: JSON.stringify(this.state.newExperience),
-          headers: new Headers({
-            "Authorization": "Basic " + this.props.authoKey,
-            "Content-Type": "application/json",
-          }),
-        }
-      ),
+    let resp = await fetch(
+      apiKey +
+        "/api/profile/" +
+        this.props.userID +
+        "/experiences/" +
+        this.state.editElementId,
+      {
+        method: "PUT",
+        body: JSON.stringify(this.state.newExperience),
+        headers: new Headers({
+          "Authorization": "Basic " + this.props.authoKey,
+          "Content-Type": "application/json",
+        }),
+      }
+    );
 
-      fetch(
-        apiKey +
-          "/api/profile/" +
-          this.props.userID +
-          "/experiences/" +
-          this.state.editElementId +
-          "/picture",
-        {
-          method: "POST",
-          body: this.state.image,
-          headers: new Headers({
-            Authorization: "Basic " + this.props.authoKey,
-          }),
-        }
-      ).then(await this.fetchuserExperiences()),
-    ])
-      .then(
-        this.setState({
-          showModal: false,
-          addExperience: false,
-          editExperience: false,
-        })
-      )
+    if (resp.ok) {
+      this.setState({
+        showModal: false,
+        addExperience: false,
+        editExperience: false,
+      });
+    }
+    let resp2 = await fetch(
+      apiKey +
+        "/api/profile/" +
+        this.props.userID +
+        "/experiences/" +
+        this.state.editElementId +
+        "/picture",
+      {
+        method: "POST",
+        body: this.state.image,
+        headers: new Headers({
+          Authorization: "Basic " + this.props.authoKey,
+        }),
+      }
+    );
 
-      .catch((err) => console.log(err));
+    if (resp2.ok) {
+      this.fetchuserExperiences();
+    }
   };
 
   deleteExperience = async (id) => {

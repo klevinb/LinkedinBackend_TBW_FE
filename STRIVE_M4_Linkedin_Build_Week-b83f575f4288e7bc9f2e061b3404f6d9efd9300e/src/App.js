@@ -122,7 +122,7 @@ class App extends Component {
                   username={this.props.username}
                   users={this.state.users}
                   userImage={
-                    this.state.users &&
+                    this.state.users.length > 0 &&
                     this.state.users.filter(
                       (user) => user.username === this.props.username
                     )

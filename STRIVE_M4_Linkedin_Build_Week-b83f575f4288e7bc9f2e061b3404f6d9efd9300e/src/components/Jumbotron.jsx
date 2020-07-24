@@ -23,6 +23,7 @@ class JumBotron extends Component {
     editProfile: false,
   };
   handleUpload = async () => {
+    console.log("here");
     const photo = new FormData();
     photo.append("profile", this.state.profile);
 
@@ -57,7 +58,7 @@ class JumBotron extends Component {
 
   editProfileInfo = async (e) => {
     e.preventDefault();
-    let resp = await fetch(apiKey + "/api/profile/", {
+    let resp = await fetch(apiKey + "/api/profile/" + this.props.username, {
       method: "PUT",
       body: JSON.stringify(this.state.profileInfo),
       headers: new Headers({
@@ -67,10 +68,10 @@ class JumBotron extends Component {
     });
 
     if (resp.ok) {
-      this.handleUpload();
       alert("You just edited your profile!");
       this.setState({ editProfile: false });
     }
+    this.handleUpload();
   };
 
   addData = (event) => {
