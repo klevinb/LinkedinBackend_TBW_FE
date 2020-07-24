@@ -102,6 +102,15 @@
   background-color: whitesmoke;
   border-radius: 30%;
 }
+@media screen and (min-width: 0px) and (max-width: 996px) {
+  #moreInfo { display: none; }
+  #status { display: none; }
+  #univ { display: none; } 
+  #btn {
+    margin-bottom: 15px;
+  }  
+}
+
 #cameraIcon label svg {
   margin-left: 0;
 }

@@ -186,7 +186,7 @@ class JumBotron extends Component {
               <div className='align-self-end mr-4'>
                 {this.props.profileInfo.username === this.props.username ? (
                   <>
-                    <div className='d-flex'>
+                    <div className='d-flex' id="btn">
                       <Button>Add profile section</Button>
                       <Button id='secondButton' onClick={() => this.getPdf()}>
                         More ...
@@ -232,7 +232,7 @@ class JumBotron extends Component {
                   <FaRegBuilding />
                   <p>{this.props.profileInfo.title}</p>
                 </div>
-                <div className='d-flex'>
+                <div className='d-flex' id="univ" >
                   <FaUniversity />
                   <p>--School--</p>
                 </div>
