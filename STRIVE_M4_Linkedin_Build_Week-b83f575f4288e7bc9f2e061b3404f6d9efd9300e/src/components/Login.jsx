@@ -6,7 +6,11 @@ import {
   FormGroup,
   Image,
   Alert,
+  Row,
+  Col
 } from "react-bootstrap";
+
+import {FiUpload} from "react-icons/fi"
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -251,74 +255,89 @@ class Login extends Component {
                 </form>
               </div>
             ) : (
-              <div className='d-flex justify-content-center'>
-                <div>
-                  <form onSubmit={this.addNewProfile}>
-                    <FormGroup controlId='name' bsSize='large'>
-                      <label>Name</label>
-                      <FormControl
-                        autoFocus
-                        id='name'
-                        type='text'
-                        value={this.state.profile.name}
-                        onChange={(e) => this.handleChangeProfile(e)}
-                      />
-                    </FormGroup>
-                    <FormGroup controlId='surname' bsSize='large'>
-                      <label>Surname</label>
-                      <FormControl
-                        autoFocus
-                        id='surname'
-                        type='text'
-                        value={this.state.profile.surname}
-                        onChange={(e) => this.handleChangeProfile(e)}
-                      />
-                    </FormGroup>
-                    <FormGroup controlId='about' bsSize='large'>
-                      <label>About You</label>
-                      <FormControl
-                        autoFocus
-                        id='about'
-                        type='text'
-                        value={this.state.profile.about}
-                        onChange={(e) => this.handleChangeProfile(e)}
-                      />
-                    </FormGroup>
-                    <FormGroup controlId='bio' bsSize='large'>
-                      <label>Bio</label>
-                      <FormControl
-                        autoFocus
-                        id='bio'
-                        type='text'
-                        value={this.state.profile.bio}
-                        onChange={(e) => this.handleChangeProfile(e)}
-                      />
-                    </FormGroup>
-                    <FormGroup controlId='title' bsSize='large'>
-                      <label>Title</label>
-                      <FormControl
-                        autoFocus
-                        id='title'
-                        type='text'
-                        value={this.state.profile.title}
-                        onChange={(e) => this.handleChangeProfile(e)}
-                      />
-                    </FormGroup>
-                    <FormGroup controlId='area' bsSize='large'>
-                      <label>Area</label>
-                      <FormControl
-                        autoFocus
-                        id='area'
-                        type='text'
-                        value={this.state.profile.area}
-                        onChange={(e) => this.handleChangeProfile(e)}
-                      />
-                    </FormGroup>
-                    <Button block bsSize='large' type='submit'>
-                      Add Info
-                    </Button>
-                  </form>
-                </div>
+              <div style={{marginTop:"35vh"}}>
+                
+                <Container className='d-flex justify-content-center'>
+                   <Row>
+                     <Col className="d-flex align-items-center mr-5">
+                        <FiUpload style={{fontSize:"55px", color:"#0073B1"}}/>
+                     </Col>
+                      <form onSubmit={this.addNewProfile}>
+                        <Container>
+                        <Image src="https://cdn.worldvectorlogo.com/logos/linkedin.svg" className="mb-3" style={{width:"150px"}}/>
+                          <Row>
+                              <Col>
+                              <FormGroup controlId='name' bsSize='large'>
+                                <label>Name</label>
+                                <FormControl
+                                  autoFocus
+                                  id='name'
+                                  type='text'
+                                  value={this.state.profile.name}
+                                  onChange={(e) => this.handleChangeProfile(e)}
+                                />
+                              </FormGroup>
+                              <FormGroup controlId='surname' bsSize='large'>
+                                <label>Surname</label>
+                                <FormControl
+                                  autoFocus
+                                  id='surname'
+                                  type='text'
+                                  value={this.state.profile.surname}
+                                  onChange={(e) => this.handleChangeProfile(e)}
+                                />
+                              </FormGroup>
+                              <FormGroup controlId='about' bsSize='large'>
+                                <label>About You</label>
+                                <FormControl
+                                  autoFocus
+                                  id='about'
+                                  type='text'
+                                  value={this.state.profile.about}
+                                  onChange={(e) => this.handleChangeProfile(e)}
+                                />
+                              </FormGroup>
+                              </Col>
+                              <Col>
+                              <FormGroup controlId='bio' bsSize='large'>
+                                <label>Bio</label>
+                                <FormControl
+                                  autoFocus
+                                  id='bio'
+                                  type='text'
+                                  value={this.state.profile.bio}
+                                  onChange={(e) => this.handleChangeProfile(e)}
+                                />
+                              </FormGroup>
+                              <FormGroup controlId='title' bsSize='large'>
+                                <label>Title</label>
+                                <FormControl
+                                  autoFocus
+                                  id='title'
+                                  type='text'
+                                  value={this.state.profile.title}
+                                  onChange={(e) => this.handleChangeProfile(e)}
+                                />
+                              </FormGroup>
+                              <FormGroup controlId='area' bsSize='large'>
+                                <label>Area</label>
+                                <FormControl
+                                  autoFocus
+                                  id='area'
+                                  type='text'
+                                  value={this.state.profile.area}
+                                  onChange={(e) => this.handleChangeProfile(e)}
+                                />
+                              </FormGroup>
+                              </Col>
+                            </Row>
+                            <Button block bsSize='small' type='submit'>
+                                Add Info
+                              </Button>
+                          </Container>
+                      </form>
+                      </Row>
+                  </Container>
               </div>
             )}
           </>
