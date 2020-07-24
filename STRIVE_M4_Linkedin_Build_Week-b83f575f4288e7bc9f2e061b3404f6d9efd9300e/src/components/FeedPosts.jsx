@@ -15,7 +15,7 @@ class FeedPosts extends Component {
     comments: [],
     newComment: {
       comment: "",
-      user: this.props.username,
+      user: this.props.userImage[0]._id,
       postid: this.props.info._id,
     },
   };
@@ -75,7 +75,7 @@ class FeedPosts extends Component {
           this.setState({
             newComment: {
               comment: "",
-              user: this.props.username,
+              user: this.props.userImage[0]._id,
               postid: this.props.info._id,
             },
           });
@@ -97,7 +97,7 @@ class FeedPosts extends Component {
           this.setState({
             newComment: {
               comment: "",
-              user: this.props.username,
+              user: this.props.userImage[0]._id,
               postid: this.props.info._id,
             },
           });
