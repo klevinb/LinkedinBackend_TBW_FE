@@ -5,8 +5,14 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Feed from "./components/Feed";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { fetchMessagesThunk } from "./utilities";
 
 const apiKey = process.env.REACT_APP_API;
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchMesagges: (username) => dispatch(fetchMessagesThunk(username)),
+});
 
 class App extends Component {
   state = {
@@ -34,6 +40,7 @@ class App extends Component {
 
   componentDidMount() {
     this.fetchUser();
+    this.props.fetchMesagges(this.props.username);
   }
 
   setSearch = (search) => {
@@ -158,4 +165,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(null, mapDispatchToProps)(App);
