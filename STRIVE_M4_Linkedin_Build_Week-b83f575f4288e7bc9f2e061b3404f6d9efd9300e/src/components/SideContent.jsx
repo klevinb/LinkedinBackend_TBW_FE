@@ -57,67 +57,71 @@ class SideContent extends React.Component {
           </Col>
         </Row>
         <p>People also viewed</p>
-        {this.state.users.map((user, i) => {
-          return (
-            <Row key={i} className='pb-3 d-flex align-items-center'>
-              <Col md={4}>
-                {user.image.length === 0 ? (
-                  <Image
+        {this.state.users
+          .filter((user) => user.username !== this.props.username)
+          .map((user, i) => {
+            return (
+              <Row key={i} className='pb-3 d-flex align-items-center'>
+                <Col md={4}>
+                  {user.image.length === 0 ? (
+                    <Image
+                      onClick={() =>
+                        this.props.props.history.push(
+                          "/profiles/" + user.username
+                        )
+                      }
+                      src='https://img.icons8.com/officel/2x/user.png'
+                      style={{
+                        height: "4rem",
+                        width: "4rem",
+                        border: "1px solid lightgray",
+                        borderRadius: "2rem",
+                      }}
+                      className='card-img img-fluid'
+                      alt='image'
+                    />
+                  ) : (
+                    <Image
+                      onClick={() =>
+                        this.props.props.history.push(
+                          "/profiles/" + user.username
+                        )
+                      }
+                      src={user.image}
+                      style={{
+                        height: "4rem",
+                        width: "4rem",
+                        border: "1px solid lightgray",
+                        borderRadius: "2rem",
+                      }}
+                      className='card-img img-fluid'
+                      alt='image'
+                    />
+                  )}
+                </Col>
+                <Col className='col col-8 d-flex justify-content-between pt-3 border-bottom'>
+                  <div
+                    className='d-flex flex-column'
                     onClick={() =>
                       this.props.props.history.push(
                         "/profiles/" + user.username
                       )
                     }
-                    src='https://img.icons8.com/officel/2x/user.png'
-                    style={{
-                      height: "4rem",
-                      width: "4rem",
-                      border: "1px solid lightgray",
-                      borderRadius: "2rem",
-                    }}
-                    className='card-img img-fluid'
-                    alt='image'
-                  />
-                ) : (
-                  <Image
-                    onClick={() =>
-                      this.props.props.history.push(
-                        "/profiles/" + user.username
-                      )
-                    }
-                    src={user.image}
-                    style={{
-                      height: "4rem",
-                      width: "4rem",
-                      border: "1px solid lightgray",
-                      borderRadius: "2rem",
-                    }}
-                    className='card-img img-fluid'
-                    alt='image'
-                  />
-                )}
-              </Col>
-              <Col className='col col-8 d-flex justify-content-between pt-3 border-bottom'>
-                <div
-                  className='d-flex flex-column'
-                  onClick={() =>
-                    this.props.props.history.push("/profiles/" + user.username)
-                  }
-                >
-                  <strong>
-                    {user.name} {user.surname}
-                  </strong>
-                  <span>{user.title}</span>
-                </div>
-                <div>
-                  <span>
-                    <i className='fa fa-user-plus'></i>
-                  </span>
-                </div>
-              </Col>
-            </Row>
-          );
-        })}
+                  >
+                    <strong>
+                      {user.name} {user.surname}
+                    </strong>
+                    <span>{user.title}</span>
+                  </div>
+                  <div>
+                    <span>
+                      <i className='fa fa-user-plus'></i>
+                    </span>
+                  </div>
+                </Col>
+              </Row>
+            );
+          })}
       </>
     );
   }

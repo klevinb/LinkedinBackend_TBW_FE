@@ -342,3 +342,61 @@
   top: 30%;
   width: 400px;
 }
+
+#chatRoom {
+  position: fixed;
+  bottom: 0%;
+  right: 7%;
+  width: 200px;
+  font-size: 23px;
+  text-decoration: none;
+  padding: 10px;
+}
+
+#chatRoom button {
+  background-color: transparent;
+  border: 0;
+  width: 100%;
+  font-size: 20px;
+}
+
+#chatRoom button:focus {
+  outline: none;
+}
+
+#chatRoom .row {
+  display: flex;
+  align-items: center;
+}
+
+#chatRoom .row img {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+
+.chat-box {
+  position: fixed;
+  bottom: 0%;
+  right: 20%;
+}
+
+.chat-box .card {
+  max-height: 400px;
+  width: 350px !important;
+  overflow-x: auto;
+}
+
+.chat-box .card-body ul {
+  max-height: 220px;
+  height: 220px;
+  overflow-x: auto;
+  padding: 0;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.chat-box .card button {
+  outline: none;
+}

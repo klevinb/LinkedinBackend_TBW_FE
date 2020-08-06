@@ -6,8 +6,6 @@ import { TiCameraOutline } from "react-icons/ti";
 import { GiCancel } from "react-icons/gi";
 import { MdAddAPhoto } from "react-icons/md";
 
-import Messages from "./Messages";
-
 const apiKey = process.env.REACT_APP_API;
 
 class JumBotron extends Component {
@@ -238,12 +236,6 @@ class JumBotron extends Component {
                     </Button>
                   </>
                 )}
-                <Messages
-                  show={this.state.showMessageModel}
-                  username={this.props.username}
-                  sendTo={this.props.profileInfo.username}
-                  toggleModal={this.toggleModal}
-                />
               </div>
               <div id='status'>
                 <div className='d-flex mt-4'>

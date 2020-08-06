@@ -7,6 +7,7 @@ import Feed from "./components/Feed";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchMessagesThunk } from "./utilities";
+import Messages from "./components/Messages";
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -158,6 +159,12 @@ class App extends Component {
               )}
             />
             <Footer />
+            {this.state.users.length > 1 && (
+              <Messages
+                users={this.state.users}
+                username={this.props.username}
+              />
+            )}
           </Container>
         </div>
       </Router>

@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Modal, InputGroup, FormControl, Button } from "react-bootstrap";
+import {
+  Modal,
+  Card,
+  Accordion,
+  Button,
+  ListGroup,
+  ListGroupItem,
+  Row,
+  Col,
+  Image,
+} from "react-bootstrap";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import { fetchMessagesThunk } from "../utilities";
@@ -19,7 +29,19 @@ class Messages extends Component {
 
   state = {
     message: "",
+    to: "",
     onlineUsers: [],
+    itemArray: [],
+  };
+
+  createChat = (name, img) => {
+    const itemArray = [];
+    const chatName = name;
+    const src = img;
+
+    itemArray.push({ chatName, src });
+
+    this.setState({ itemArray });
   };
 
   componentDidMount = () => {
@@ -32,9 +54,11 @@ class Messages extends Component {
       this.props.fetchMesagges(this.props.username);
     });
 
-    this.socket.on("list", (data) => this.setState({ onlineUsers: data }));
+    this.socket.on("list", (data) => {
+      this.setState({ onlineUsers: data });
+      console.log(data);
+    });
     this.setUsername();
-    this.setSendTo();
   };
 
   setUsername = () => {
@@ -74,7 +98,123 @@ class Messages extends Component {
   render() {
     return (
       <>
-        <div className='App'></div>
+        <div className='App'>
+          <Accordion id='chatRoom'>
+            <Card style={{ width: "300px" }} className='flex-column-reverse'>
+              <Card.Header>
+                <Accordion.Toggle eventKey='0'>{`Online (${
+                  this.state.onlineUsers.filter(
+                    (user) => user !== this.props.username
+                  ).length
+                })`}</Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey='0'>
+                <Card.Body className='p-0'>
+                  <ListGroup>
+                    {this.state.onlineUsers &&
+                      this.state.onlineUsers
+                        .filter((user) => user !== this.props.username)
+                        .map((userName) => (
+                          <ListGroupItem>
+                            <Row
+                              onClick={() =>
+                                this.createChat(
+                                  this.props.users.filter(
+                                    (user) => user.username === userName
+                                  )[0].name,
+                                  this.props.users.filter(
+                                    (user) => user.username === userName
+                                  )[0].image
+                                )
+                              }
+                            >
+                              <Col sm={3}>
+                                <Image
+                                  fluid
+                                  src={
+                                    this.props.users.filter(
+                                      (user) => user.username === userName
+                                    )[0].image
+                                  }
+                                />
+                              </Col>
+                              <Col sm={9}>
+                                {
+                                  this.props.users.filter(
+                                    (user) => user.username === userName
+                                  )[0].name
+                                }{" "}
+                                {
+                                  this.props.users.filter(
+                                    (user) => user.username === userName
+                                  )[0].surname
+                                }
+                              </Col>
+                            </Row>
+                          </ListGroupItem>
+                        ))}
+                  </ListGroup>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+          <div>
+            {this.state.itemArray.map((item, index) => {
+              return (
+                <div className='chat-box' key={index}>
+                  <Accordion defaultActiveKey='0'>
+                    <Card style={{ width: "18rem" }}>
+                      <Accordion.Toggle eventKey='0'>
+                        <Card.Header>
+                          <Row className='d-flex align-items-center'>
+                            <Col sm={3}>
+                              <Image fluid src={item.src} />
+                            </Col>
+                            <Col sm={9}>
+                              <h4>{item.chatName}</h4>
+                            </Col>
+                          </Row>
+                        </Card.Header>
+                      </Accordion.Toggle>
+                      <Accordion.Collapse eventKey='0'>
+                        <Card.Body className='p-0'>
+                          <ul id='messages' style={{ listStyle: "none" }}>
+                            {this.props.messages.map((msg, i) => (
+                              <>
+                                {this.props.username === msg.from &&
+                                msg.to === "klevinb" ? (
+                                  <li key={i} className='text-right'>
+                                    {msg.text}
+                                  </li>
+                                ) : (
+                                  this.props.username === msg.to &&
+                                  msg.from === "klevinb" && (
+                                    <li key={i}>{msg.text}</li>
+                                  )
+                                )}
+                              </>
+                            ))}
+                          </ul>
+
+                          <Card.Footer>
+                            <input
+                              autoComplete='off'
+                              value={this.state.message}
+                              onChange={this.setMessage}
+                            />
+                            <button onClick={() => this.sendMessage()}>
+                              Send
+                            </button>
+                          </Card.Footer>
+                        </Card.Body>
+                      </Accordion.Collapse>
+                    </Card>
+                  </Accordion>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
         <Modal show={this.props.show} onHide={this.props.toggleModal}>
           <Modal.Title>
@@ -92,24 +232,7 @@ class Messages extends Component {
             <ul id='messages'>
               {this.props.messages.map((msg, i) => (
                 <>
-                  {this.props.username === msg.from &&
-                  this.props.sendTo === msg.to ? (
-                    <li key={i} className='text-right'>
-                      {msg.text}
-                    </li>
-                  ) : (
-                    this.props.username === msg.to &&
-                    this.props.sendTo === msg.from && (
-                      <li key={i} className='text-left'>
-                        {console.log(
-                          msg,
-                          this.state.sendToUser,
-                          this.props.sendTo
-                        )}
-                        {msg.from} : {msg.text}
-                      </li>
-                    )
-                  )}
+                  <li key={i}>{msg.text}</li>
                 </>
               ))}
             </ul>

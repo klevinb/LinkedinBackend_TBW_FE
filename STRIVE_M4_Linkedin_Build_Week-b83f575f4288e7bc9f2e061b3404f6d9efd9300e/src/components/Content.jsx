@@ -4,8 +4,7 @@ import Jumbotron from "./Jumbotron";
 import SideContent from "./SideContent";
 import UserContent from "./UserContent";
 import Experiences from "./Experiences";
-import { Spinner } from "react-bootstrap";
-import { Col } from "react-bootstrap";
+import { Col, Spinner, Button } from "react-bootstrap";
 import "./MainCss.css";
 
 const apiKey = process.env.REACT_APP_API;
@@ -110,6 +109,7 @@ class Content extends Component {
               <Col md={3} className='sideContent pl-4 pt-4'>
                 <SideContent
                   props={this.props}
+                  username={this.props.username}
                   authoKey={this.props.authoKey}
                 />
               </Col>
