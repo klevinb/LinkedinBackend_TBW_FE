@@ -35,7 +35,7 @@ class Messages extends Component {
   };
 
   createChat = (name, img) => {
-    const itemArray = [];
+    const itemArray = this.state.itemArray;
     const chatName = name;
     const src = img;
 
@@ -110,149 +110,101 @@ class Messages extends Component {
               </Card.Header>
               <Accordion.Collapse eventKey='0'>
                 <Card.Body className='p-0'>
+                  {console.log(this.props.username)}
                   <ListGroup>
                     {this.state.onlineUsers &&
                       this.state.onlineUsers
                         .filter((user) => user !== this.props.username)
-                        .map((userName) => (
-                          <ListGroupItem>
-                            <Row
-                              onClick={() =>
-                                this.createChat(
-                                  this.props.users.filter(
-                                    (user) => user.username === userName
-                                  )[0].name,
-                                  this.props.users.filter(
-                                    (user) => user.username === userName
-                                  )[0].image
-                                )
-                              }
-                            >
-                              <Col sm={3}>
-                                <Image
-                                  fluid
-                                  src={
-                                    this.props.users.filter(
-                                      (user) => user.username === userName
-                                    )[0].image
-                                  }
-                                />
-                              </Col>
-                              <Col sm={9}>
-                                {
-                                  this.props.users.filter(
-                                    (user) => user.username === userName
-                                  )[0].name
-                                }{" "}
-                                {
-                                  this.props.users.filter(
-                                    (user) => user.username === userName
-                                  )[0].surname
+                        .map((userName) => {
+                          const currentUser = this.props.users.find(
+                            (user) => user.username === userName
+                          );
+                          if (!currentUser) return <div>user not found</div>;
+
+                          return (
+                            <ListGroupItem>
+                              <Row
+                                onClick={() =>
+                                  this.createChat(
+                                    currentUser.name,
+                                    currentUser.image
+                                  )
                                 }
-                              </Col>
-                            </Row>
-                          </ListGroupItem>
-                        ))}
+                              >
+                                <Col sm={3}>
+                                  <Image fluid src={currentUser.image} />
+                                </Col>
+                                <Col sm={9}>
+                                  {currentUser.name} {currentUser.surname}
+                                </Col>
+                              </Row>
+                            </ListGroupItem>
+                          );
+                        })}
                   </ListGroup>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
           <div>
-            {this.state.itemArray.map((item, index) => {
-              return (
-                <div className='chat-box' key={index}>
-                  <Accordion defaultActiveKey='0'>
-                    <Card style={{ width: "18rem" }}>
-                      <Accordion.Toggle eventKey='0'>
-                        <Card.Header>
-                          <Row className='d-flex align-items-center'>
-                            <Col sm={3}>
-                              <Image fluid src={item.src} />
-                            </Col>
-                            <Col sm={9}>
-                              <h4>{item.chatName}</h4>
-                            </Col>
-                          </Row>
-                        </Card.Header>
-                      </Accordion.Toggle>
-                      <Accordion.Collapse eventKey='0'>
-                        <Card.Body className='p-0'>
-                          <ul id='messages' style={{ listStyle: "none" }}>
-                            {this.props.messages.map((msg, i) => (
-                              <>
-                                {this.props.username === msg.from &&
-                                msg.to === "klevinb" ? (
-                                  <li key={i} className='text-right'>
-                                    {msg.text}
-                                  </li>
-                                ) : (
-                                  this.props.username === msg.to &&
-                                  msg.from === "klevinb" && (
-                                    <li key={i}>{msg.text}</li>
-                                  )
-                                )}
-                              </>
-                            ))}
-                          </ul>
+            <div className='chat-box d-flex'>
+              {this.state.itemArray.map((item, index) => {
+                return (
+                  <div>
+                    <Accordion defaultActiveKey={index} key={index}>
+                      <Card style={{ width: "18rem" }}>
+                        <Accordion.Toggle eventKey={index}>
+                          <Card.Header>
+                            <Row className='d-flex align-items-center'>
+                              <Col sm={3}>
+                                <Image fluid src={item.src} />
+                              </Col>
+                              <Col sm={9}>
+                                <h4>{item.chatName}</h4>
+                              </Col>
+                            </Row>
+                          </Card.Header>
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey={index}>
+                          <Card.Body className='p-0'>
+                            <ul id='messages' style={{ listStyle: "none" }}>
+                              {this.props.messages.map((msg, i) => (
+                                <>
+                                  {this.props.username === msg.from &&
+                                  msg.to === "eriseldk" ? (
+                                    <li key={i} className='text-right'>
+                                      {msg.text}
+                                    </li>
+                                  ) : (
+                                    this.props.username === msg.to &&
+                                    msg.from === "klevinb" && (
+                                      <li key={i}>{msg.text}</li>
+                                    )
+                                  )}
+                                </>
+                              ))}
+                            </ul>
 
-                          <Card.Footer>
-                            <input
-                              autoComplete='off'
-                              value={this.state.message}
-                              onChange={this.setMessage}
-                            />
-                            <button onClick={() => this.sendMessage()}>
-                              Send
-                            </button>
-                          </Card.Footer>
-                        </Card.Body>
-                      </Accordion.Collapse>
-                    </Card>
-                  </Accordion>
-                </div>
-              );
-            })}
+                            <Card.Footer>
+                              <input
+                                autoComplete='off'
+                                value={this.state.message}
+                                onChange={this.setMessage}
+                              />
+                              <button onClick={() => this.sendMessage()}>
+                                Send
+                              </button>
+                            </Card.Footer>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                    </Accordion>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
-
-        <Modal show={this.props.show} onHide={this.props.toggleModal}>
-          <Modal.Title>
-            <div className='ml-4 mt-2'>Set Username</div>
-          </Modal.Title>
-          <Modal.Header>
-            <input
-              autoComplete='off'
-              value={this.state.message}
-              onChange={this.setMessage}
-            />
-            <button onClick={() => this.sendMessage()}>Send</button>
-          </Modal.Header>
-          <Modal.Body>
-            <ul id='messages'>
-              {this.props.messages.map((msg, i) => (
-                <>
-                  <li key={i}>{msg.text}</li>
-                </>
-              ))}
-            </ul>
-            <ul>
-              {this.state.onlineUsers.map((user) => (
-                <li>{user}</li>
-              ))}
-            </ul>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              onClick={() => {
-                this.props.toggleModal();
-                this.sendMessage();
-              }}
-            >
-              Submit
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </>
     );
   }
