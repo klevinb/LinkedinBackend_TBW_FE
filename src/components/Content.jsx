@@ -4,7 +4,7 @@ import Jumbotron from "./Jumbotron";
 import SideContent from "./SideContent";
 import UserContent from "./UserContent";
 import Experiences from "./Experiences";
-import { Col, Spinner, Button } from "react-bootstrap";
+import { Col, Spinner } from "react-bootstrap";
 import "./MainCss.css";
 
 const apiKey = process.env.REACT_APP_API;

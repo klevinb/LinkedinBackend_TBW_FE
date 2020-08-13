@@ -2,7 +2,6 @@ import React from "react";
 import { Row, Col, Image } from "react-bootstrap";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import "./MainCss.css";
-import { Link } from "react-router-dom";
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -12,8 +11,6 @@ class SideContent extends React.Component {
   };
 
   fetchUsers = async () => {
-    const url = apiKey + "/api/profile/";
-
     let resp = await fetch(apiKey + "/api/profile/", {
       headers: new Headers({
         "Authorization": "Bearer " + this.props.authoKey,

@@ -1,12 +1,6 @@
 import React, { Component } from "react";
 import { Container, Image, Col, Jumbotron } from "react-bootstrap";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  withRouter,
-} from "react-router-dom";
+import { BrowserRouter as Router, Link, withRouter } from "react-router-dom";
 
 export class SideBar extends Component {
   render() {

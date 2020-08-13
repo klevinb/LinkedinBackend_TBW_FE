@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, ListGroup, Dropdown, Accordion, Button } from "react-bootstrap";
+import { Image, Dropdown, Accordion, Button } from "react-bootstrap";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
@@ -234,7 +234,7 @@ class FeedPosts extends Component {
           <Accordion defaultActiveKey=''>
             <div className='commentIcons d-flex'>
               {this.props.info.likes.find(
-                (user) => user.username == this.props.username
+                (user) => user.username === this.props.username
               ) !== undefined ? (
                 <div onClick={() => this.addLike(this.props.userImage[0]._id)}>
                   <AiFillLike /> Liked

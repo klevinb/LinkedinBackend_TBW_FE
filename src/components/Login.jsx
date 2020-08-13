@@ -55,7 +55,7 @@ class Login extends Component {
     const photo = new FormData();
     photo.append("profile", this.state.photo);
 
-    const resp = await fetch(
+    await fetch(
       apiKey + "/api/profile/" + this.state.profile.username + "/upload",
       {
         method: "POST",

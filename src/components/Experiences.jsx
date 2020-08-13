@@ -42,8 +42,8 @@ class Experiences extends Component {
     });
   };
 
-  fetchUserExp = async () => {
-    let resp = await fetch(
+  fetchUserExp = () => {
+    fetch(
       apiKey + "/api/profile/" + this.props.userID + "/experiences/",
       {
         headers: new Headers({
