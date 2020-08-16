@@ -66,15 +66,15 @@ class Messages extends Component {
   render() {
     return (
       <>
-        <div className='App'>
+        <div className='App Chat'>
           <Accordion id='chatRoom'>
             <Card style={{ width: "300px" }} className='flex-column-reverse'>
               <Card.Header>
-                <Accordion.Toggle eventKey='0'>{`Online (${
-                  this.state.onlineUsers.filter(
-                    (user) => user !== this.props.username
-                  ).length
-                })`}</Accordion.Toggle>
+                <Accordion.Toggle eventKey='0'>
+                  {console.log(this.props.userImage)}
+                  <Image src={this.props.userImage[0].image} />
+                  {`Messaging `}
+                </Accordion.Toggle>
               </Card.Header>
               <Accordion.Collapse eventKey='0'>
                 <Card.Body className='p-0'>

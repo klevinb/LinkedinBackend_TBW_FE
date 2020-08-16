@@ -343,21 +343,32 @@
   width: 400px;
 }
 
-#chatRoom {
+.Chat {
   position: fixed;
   bottom: 0%;
-  right: 7%;
-  width: 200px;
+  right: 0%;
   font-size: 23px;
   text-decoration: none;
-  padding: 10px;
+  width: 300px;
 }
 
+#chatRoom .card {
+  border: 0;
+}
 #chatRoom button {
   background-color: transparent;
   border: 0;
   width: 100%;
+  color: white;
   font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+#chatRoom button img {
+  width: 15%;
+  height: 15%;
+  border-radius: 25px;
+  margin-right: 10px;
 }
 
 #chatRoom button:focus {
@@ -374,11 +385,14 @@
   width: 60px;
   border-radius: 50%;
 }
+#chatRoom .card-header {
+  background-color: #283e4a;
+}
 
 .chat-box {
   position: fixed;
   bottom: 0%;
-  right: 20%;
+  right: 15%;
 }
 
 .chat-box .card {
@@ -399,4 +413,13 @@
 
 .chat-box .card button {
   outline: none;
+  border: 0;
+}
+
+#messages {
+  font-family: cursive;
+}
+
+.chat-box .card-footer {
+  display: flex;
 }

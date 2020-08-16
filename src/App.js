@@ -163,6 +163,12 @@ class App extends Component {
               <Messages
                 users={this.state.users}
                 username={this.props.username}
+                userImage={
+                  this.state.users.length > 0 &&
+                  this.state.users.filter(
+                    (user) => user.username === this.props.username
+                  )
+                }
               />
             )}
           </Container>
