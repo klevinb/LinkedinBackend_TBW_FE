@@ -1,31 +1,25 @@
-import React, { Component } from "react";
-import App from "./App";
-import Login from "./components/Login";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { Component } from 'react';
+import App from './App';
+import Login from './components/Login';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 class MyApp extends Component {
   state = {
-    authorizationKey: localStorage.getItem("authorizationKey"),
-    username: localStorage.getItem("username"),
-    showApp: true,
+    username: localStorage.getItem('username'),
   };
 
-  getAuthorization = (autho, username) => {
-    localStorage.setItem("authorizationKey", autho);
-    localStorage.setItem("username", username);
+  getAuthorization = (username) => {
+    localStorage.setItem('username', username);
   };
   resetAuthorization = () => {
-    localStorage.removeItem("authorizationKey");
-    localStorage.removeItem("username");
-    this.setState({ showApp: false, authorizationKey: "", username: "" });
+    localStorage.removeItem('username');
+    this.setState({ username: '' });
   };
 
-  showApp = () => {
-    this.setState({
-      authorizationKey: localStorage.getItem("authorizationKey"),
-      username: localStorage.getItem("username"),
-      showApp: true,
-    });
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.username && prevState.username !== this.state.username) {
+      this.setState(this.state);
+    }
   };
 
   render() {
@@ -33,23 +27,17 @@ class MyApp extends Component {
       <>
         <Router>
           <Route
-            path='/'
+            path='/login'
             exact
             render={(props) => (
               <Login
-                {...props}
                 getAuthorization={this.getAuthorization}
-                showApp={this.showApp}
                 resetAuthorization={this.resetAuthorization}
+                {...props}
               />
             )}
           />
-          {this.state.showApp && this.state.authorizationKey !== null && (
-            <App
-              authoKey={this.state.authorizationKey}
-              username={this.state.username}
-            />
-          )}
+          <App username={this.state.username} />
         </Router>
       </>
     );

@@ -1,7 +1,7 @@
-import React from "react";
-import { Row, Col, Image } from "react-bootstrap";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import "./MainCss.css";
+import React from 'react';
+import { Row, Col, Image } from 'react-bootstrap';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import './MainCss.css';
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -11,11 +11,11 @@ class SideContent extends React.Component {
   };
 
   fetchUsers = async () => {
-    let resp = await fetch(apiKey + "/api/profile/", {
-      headers: new Headers({
-        "Authorization": "Bearer " + this.props.authoKey,
-        "Content-Type": "application/json",
-      }),
+    let resp = await fetch(apiKey + '/api/profile/', {
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     if (resp.ok) {
@@ -60,19 +60,19 @@ class SideContent extends React.Component {
             return (
               <Row key={i} className='pb-3 d-flex align-items-center'>
                 <Col md={4}>
-                  {user.image.length === 0 ? (
+                  {!user.image ? (
                     <Image
                       onClick={() =>
                         this.props.props.history.push(
-                          "/profiles/" + user.username
+                          '/profiles/' + user.username
                         )
                       }
                       src='https://img.icons8.com/officel/2x/user.png'
                       style={{
-                        height: "4rem",
-                        width: "4rem",
-                        border: "1px solid lightgray",
-                        borderRadius: "2rem",
+                        height: '4rem',
+                        width: '4rem',
+                        border: '1px solid lightgray',
+                        borderRadius: '2rem',
                       }}
                       className='card-img img-fluid'
                       alt='image'
@@ -81,15 +81,15 @@ class SideContent extends React.Component {
                     <Image
                       onClick={() =>
                         this.props.props.history.push(
-                          "/profiles/" + user.username
+                          '/profiles/' + user.username
                         )
                       }
                       src={user.image}
                       style={{
-                        height: "4rem",
-                        width: "4rem",
-                        border: "1px solid lightgray",
-                        borderRadius: "2rem",
+                        height: '4rem',
+                        width: '4rem',
+                        border: '1px solid lightgray',
+                        borderRadius: '2rem',
                       }}
                       className='card-img img-fluid'
                       alt='image'
@@ -101,7 +101,7 @@ class SideContent extends React.Component {
                     className='d-flex flex-column'
                     onClick={() =>
                       this.props.props.history.push(
-                        "/profiles/" + user.username
+                        '/profiles/' + user.username
                       )
                     }
                   >

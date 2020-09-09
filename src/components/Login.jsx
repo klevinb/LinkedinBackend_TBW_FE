@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Container,
   FormControl,
@@ -8,9 +8,10 @@ import {
   Alert,
   Row,
   Col,
-} from "react-bootstrap";
+} from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 
-import { FiUpload } from "react-icons/fi";
+import { FiUpload } from 'react-icons/fi';
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -18,34 +19,34 @@ class Login extends Component {
   state = {
     photo: null,
     user: {
-      username: "",
-      password: "",
+      credentials: '',
+      password: '',
     },
     signup: false,
     login: true,
     newUser: {
-      username: "",
-      email: "",
-      password: "",
+      username: '',
+      email: '',
+      password: '',
     },
     profile: {
-      name: "",
-      surname: "",
-      email: "",
-      bio: "",
-      title: "",
-      about: "",
-      area: "",
-      image: "",
-      username: "",
+      name: '',
+      surname: '',
+      email: '',
+      bio: '',
+      title: '',
+      about: '',
+      area: '',
+      image: '',
+      username: '',
     },
-    token: "",
+    token: '',
     fromLogin: false,
   };
 
   setName = (e) => {
     const user = this.state.user;
-    user.username = e;
+    user.credentials = e;
     this.setState({
       user,
     });
@@ -53,15 +54,15 @@ class Login extends Component {
 
   handleUpload = async () => {
     const photo = new FormData();
-    photo.append("profile", this.state.photo);
+    photo.append('profile', this.state.photo);
 
     await fetch(
-      apiKey + "/api/profile/" + this.state.profile.username + "/upload",
+      apiKey + '/api/profile/' + this.state.profile.username + '/upload',
       {
-        method: "POST",
+        method: 'POST',
         body: photo,
         headers: new Headers({
-          Authorization: "Bearer " + this.state.token,
+          Authorization: 'Bearer ' + this.state.token,
         }),
       }
     );
@@ -92,54 +93,29 @@ class Login extends Component {
   };
 
   fetchUser = async () => {
-    let resp = await fetch(apiKey + "/user/login", {
-      method: "POST",
+    let resp = await fetch(apiKey + '/api/profile/login', {
+      method: 'POST',
       body: JSON.stringify(this.state.user),
+      credentials: 'include',
       headers: new Headers({
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       }),
     });
     if (resp.ok) {
-      const data = await resp.json();
-      this.props.getAuthorization(data.token, data.username);
-      this.props.history.push("/profiles/" + data.username);
-      this.props.showApp();
+      this.props.getAuthorization(this.state.user.credentials);
+
+      this.props.history.push('/profiles/me');
     } else {
       this.setState({ signup: true, fromLogin: true });
     }
   };
 
-  componentDidMount = () => {
-    localStorage.removeItem("authorizationKey");
-    localStorage.removeItem("username");
+  componentDidMount() {
     this.props.resetAuthorization();
-  };
-
+  }
   handleSubmit = (e) => {
     e.preventDefault();
     this.fetchUser();
-  };
-
-  addNewUser = async (e) => {
-    e.preventDefault();
-    const resp = await fetch(apiKey + "/user/signup", {
-      method: "POST",
-      body: JSON.stringify(this.state.newUser),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (resp.ok) {
-      const data = await resp.json();
-      const profile = this.state.profile;
-      profile.email = data.addUser.email;
-      profile.username = data.addUser.username;
-      this.setState({
-        token: data.token,
-        profile,
-        signup: false,
-      });
-    }
   };
 
   addPhoto = (e) => {
@@ -152,36 +128,32 @@ class Login extends Component {
 
   addNewProfile = async (e) => {
     e.preventDefault();
-    const resp = await fetch(apiKey + "/api/profile", {
-      method: "POST",
-      body: JSON.stringify(this.state.profile),
-      headers: new Headers({
-        "Authorization": "Bearer " + this.state.token,
-        "Content-Type": "application/json",
+    const resp = await fetch(apiKey + '/api/profile', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...this.state.profile,
+        ...this.state.newUser,
       }),
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
     });
     const photo = new FormData();
-    photo.append("profile", this.state.photo);
-    const user = await resp.json();
+    photo.append('profile', this.state.photo);
+    const id = await resp.json();
 
-    const resp2 = await fetch(
-      apiKey + "/api/profile/" + user.username + "/upload",
-      {
-        method: "POST",
-        body: photo,
-        headers: new Headers({
-          Authorization: "Bearer " + this.state.token,
-        }),
-      }
-    );
-    if (resp2.ok) {
-      this.props.getAuthorization(
-        this.state.token,
-        this.state.profile.username
-      );
-      this.props.history.push("/profiles/" + this.state.profile.username);
-      this.props.showApp();
-    }
+    await fetch(apiKey + '/api/profile/' + id + '/upload', {
+      method: 'POST',
+      body: photo,
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
+
+    this.props.history.push('/');
   };
 
   render() {
@@ -194,7 +166,7 @@ class Login extends Component {
               src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'
             />
             <form onSubmit={this.handleSubmit}>
-              <FormGroup controlId='name' bsSize='large'>
+              <FormGroup controlId='name'>
                 <label>Email</label>
                 <FormControl
                   autoFocus
@@ -203,7 +175,7 @@ class Login extends Component {
                   onChange={(e) => this.setName(e.target.value)}
                 />
               </FormGroup>
-              <FormGroup controlId='password' bsSize='large'>
+              <FormGroup controlId='password'>
                 <label>Password</label>
                 <FormControl
                   value={this.state.password}
@@ -211,9 +183,17 @@ class Login extends Component {
                   type='password'
                 />
               </FormGroup>
-              <Button block bsSize='large' type='submit'>
+              <Button block type='submit'>
                 Login
               </Button>
+              <a href='http://localhost:3008/api/profile/auth/facebook'>
+                FACEEEEEEBOOOK
+              </a>
+              <br />
+              <a href='http://localhost:3008/api/profile/auth/linkedin'>
+                Linkedinnn
+              </a>
+
               <div className='d-flex justify-content-center mt-2'>
                 <Button
                   id='createAccLink'
@@ -259,8 +239,8 @@ class Login extends Component {
                   className='mb-3'
                   src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'
                 />
-                <form onSubmit={this.addNewUser}>
-                  <FormGroup controlId='username' bsSize='large'>
+                <form>
+                  <FormGroup controlId='username'>
                     <label>Username</label>
                     <FormControl
                       autoFocus
@@ -270,7 +250,7 @@ class Login extends Component {
                       onChange={(e) => this.handleChange(e)}
                     />
                   </FormGroup>
-                  <FormGroup controlId='email' bsSize='large'>
+                  <FormGroup controlId='email'>
                     <label>Email</label>
                     <FormControl
                       value={this.state.newUser.email}
@@ -279,7 +259,7 @@ class Login extends Component {
                       id='email'
                     />
                   </FormGroup>
-                  <FormGroup controlId='password' bsSize='large'>
+                  <FormGroup controlId='password'>
                     <label>Password</label>
                     <FormControl
                       value={this.state.newUser.password}
@@ -288,25 +268,28 @@ class Login extends Component {
                       id='password'
                     />
                   </FormGroup>
-                  <Button block bsSize='large' type='submit'>
+                  <Button
+                    block
+                    onClick={() => this.setState({ signup: false })}
+                  >
                     Sign Up
                   </Button>
                 </form>
               </div>
             ) : (
-              <div style={{ marginTop: "35vh" }}>
+              <div style={{ marginTop: '35vh' }}>
                 <Container className='d-flex justify-content-center'>
                   <Row>
                     <Col className='d-flex align-items-center mr-5'>
                       <label htmlFor='profilePhoto'>
                         <FiUpload
-                          style={{ fontSize: "55px", color: "#0073B1" }}
+                          style={{ fontSize: '55px', color: '#0073B1' }}
                         />
                       </label>
                     </Col>
                     <form onSubmit={this.addNewProfile}>
                       <input
-                        style={{ display: "none" }}
+                        style={{ display: 'none' }}
                         type='file'
                         id='profilePhoto'
                         profile='file'
@@ -317,11 +300,11 @@ class Login extends Component {
                         <Image
                           src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'
                           className='mb-3'
-                          style={{ width: "150px" }}
+                          style={{ width: '150px' }}
                         />
                         <Row>
                           <Col>
-                            <FormGroup controlId='name' bsSize='large'>
+                            <FormGroup controlId='name'>
                               <label>Name</label>
                               <FormControl
                                 autoFocus
@@ -331,7 +314,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='surname' bsSize='large'>
+                            <FormGroup controlId='surname'>
                               <label>Surname</label>
                               <FormControl
                                 autoFocus
@@ -341,7 +324,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='about' bsSize='large'>
+                            <FormGroup controlId='about'>
                               <label>About You</label>
                               <FormControl
                                 autoFocus
@@ -353,7 +336,7 @@ class Login extends Component {
                             </FormGroup>
                           </Col>
                           <Col>
-                            <FormGroup controlId='bio' bsSize='large'>
+                            <FormGroup controlId='bio'>
                               <label>Bio</label>
                               <FormControl
                                 autoFocus
@@ -363,7 +346,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='title' bsSize='large'>
+                            <FormGroup controlId='title'>
                               <label>Title</label>
                               <FormControl
                                 autoFocus
@@ -373,7 +356,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='area' bsSize='large'>
+                            <FormGroup controlId='area'>
                               <label>Area</label>
                               <FormControl
                                 autoFocus

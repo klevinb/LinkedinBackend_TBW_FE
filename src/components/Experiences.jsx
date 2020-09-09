@@ -1,29 +1,29 @@
-import React, { Component } from "react";
-import { Modal, Image, Form, Button, Row, Col } from "react-bootstrap";
-import { RiPencilLine, RiDownloadLine } from "react-icons/ri";
-import { AiOutlinePlus } from "react-icons/ai";
-import "./MainCss.css";
+import React, { Component } from 'react';
+import { Modal, Image, Form, Button, Row, Col } from 'react-bootstrap';
+import { RiPencilLine, RiDownloadLine } from 'react-icons/ri';
+import { AiOutlinePlus } from 'react-icons/ai';
+import './MainCss.css';
 
 const apiKey = process.env.REACT_APP_API;
 
 class Experiences extends Component {
   state = {
-    userExperiences: "",
-    userID: this.props.userID,
+    userExperiences: '',
+    userID: this.props.user_id,
     showModal: false,
     addExperience: false,
     editExperience: false,
-    editElementId: "",
+    editElementId: '',
     newExperience: {
-      role: "",
-      company: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-      area: "",
-      username: this.props.userID,
+      role: '',
+      company: '',
+      startDate: '',
+      endDate: '',
+      description: '',
+      area: '',
+      username: this.props.user_id,
     },
-    image: "",
+    image: '',
   };
 
   handleChange = (event) => {
@@ -36,22 +36,26 @@ class Experiences extends Component {
   };
   saveImg = (event) => {
     let photo = new FormData();
-    photo.append("picture", event.target.files[0]);
+    photo.append('picture', event.target.files[0]);
     this.setState({
       image: photo,
     });
   };
 
+  // let resp = await fetch(apiKey + '/api/profile/' + this.state.userId, {
+  //   credentials: 'include',
+  //   headers: {
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  // });
+
   fetchUserExp = () => {
-    fetch(
-      apiKey + "/api/profile/" + this.props.userID + "/experiences/",
-      {
-        headers: new Headers({
-          "Authorization": "Basic " + this.props.authoKey,
-          "Content-Type": "application/json",
-        }),
-      }
-    )
+    fetch(apiKey + '/api/profile/' + this.props.user_id + '/experiences/', {
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
       .then((resp) => resp.json())
       .then((respObj) =>
         respObj.filter((exp) => exp._id === this.state.editElementId)
@@ -75,56 +79,18 @@ class Experiences extends Component {
     e.preventDefault();
     let resp = await fetch(
       apiKey +
-        "/api/profile/" +
-        this.props.userID +
-        "/experiences/" +
+        '/api/profile/' +
+        this.props.user_id +
+        '/experiences/' +
         this.state.editElementId,
       {
-        method: "PUT",
+        method: 'PUT',
         body: JSON.stringify(this.state.newExperience),
-        headers: new Headers({
-          "Authorization": "Basic " + this.props.authoKey,
-          "Content-Type": "application/json",
-        }),
-      }
-    );
-
-    if (resp.ok) {
-      this.setState({
-        showModal: false,
-        addExperience: false,
-        editExperience: false,
-      });
-    }
-    let resp2 = await fetch(
-      apiKey +
-        "/api/profile/" +
-        this.props.userID +
-        "/experiences/" +
-        this.state.editElementId +
-        "/picture",
-      {
-        method: "POST",
-        body: this.state.image,
-        headers: new Headers({
-          Authorization: "Basic " + this.props.authoKey,
-        }),
-      }
-    );
-
-    if (resp2.ok) {
-      this.fetchuserExperiences();
-    }
-  };
-
-  deleteExperience = async (id) => {
-    let resp = await fetch(
-      apiKey + "/api/profile/" + this.props.userID + "/experiences/" + id,
-      {
-        method: "DELETE",
-        headers: new Headers({
-          Authorization: "Basic " + this.props.authoKey,
-        }),
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
       }
     );
 
@@ -134,13 +100,65 @@ class Experiences extends Component {
         addExperience: false,
         editExperience: false,
         newExperience: {
-          role: "",
-          company: "",
-          startDate: "",
-          endDate: "",
-          description: "",
-          area: "",
-          username: this.props.userID,
+          role: '',
+          company: '',
+          startDate: '',
+          endDate: '',
+          description: '',
+          area: '',
+          username: this.props.user_id,
+        },
+      });
+    }
+    let resp2 = await fetch(
+      apiKey +
+        '/api/profile/' +
+        this.props.user_id +
+        '/experiences/' +
+        this.state.editElementId +
+        '/picture',
+      {
+        method: 'POST',
+        body: this.state.image,
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
+
+    if (resp2.ok) {
+      this.fetchuserExperiences();
+    } else {
+      this.fetchuserExperiences();
+    }
+  };
+
+  deleteExperience = async (id) => {
+    let resp = await fetch(
+      apiKey + '/api/profile/' + this.props.user_id + '/experiences/' + id,
+      {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
+
+    if (resp.ok) {
+      this.setState({
+        showModal: false,
+        addExperience: false,
+        editExperience: false,
+        newExperience: {
+          role: '',
+          company: '',
+          startDate: '',
+          endDate: '',
+          description: '',
+          area: '',
+          username: this.props.user_id,
         },
       });
       await this.fetchuserExperiences();
@@ -151,14 +169,15 @@ class Experiences extends Component {
     e.preventDefault();
 
     let resp = await fetch(
-      apiKey + "/api/profile/" + this.props.userID + "/experiences",
+      apiKey + '/api/profile/' + this.props.user_id + '/experiences',
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(this.state.newExperience),
-        headers: new Headers({
-          "Authorization": "Basic " + this.props.authoKey,
-          "Content-Type": "application/json",
-        }),
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
       }
     );
 
@@ -167,6 +186,15 @@ class Experiences extends Component {
         showModal: false,
         addExperience: false,
         editExperience: false,
+        newExperience: {
+          role: '',
+          company: '',
+          startDate: '',
+          endDate: '',
+          description: '',
+          area: '',
+          username: this.props.user_id,
+        },
       });
     }
 
@@ -174,32 +202,38 @@ class Experiences extends Component {
 
     let resp2 = await fetch(
       apiKey +
-        "/api/profile/" +
-        this.props.userID +
-        "/experiences/" +
+        '/api/profile/' +
+        this.props.user_id +
+        '/experiences/' +
         id +
-        "/picture",
+        '/picture',
       {
-        method: "POST",
+        method: 'POST',
         body: this.state.image,
-        headers: new Headers({
-          Authorization: "Basic " + this.props.authoKey,
-        }),
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       }
     );
 
     if (resp2.ok) {
       this.fetchuserExperiences();
+    } else {
+      this.fetchuserExperiences();
     }
   };
 
   fetchuserExperiences = async () => {
-    await fetch(apiKey + "/api/profile/" + this.props.userID + "/experiences", {
-      headers: new Headers({
-        "Authorization": "Basic " + this.props.authoKey,
-        "Content-Type": "application/json",
-      }),
-    })
+    await fetch(
+      apiKey + '/api/profile/' + this.props.user_id + '/experiences',
+      {
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    )
       .then((resp) => resp.json())
       .then((respObj) =>
         this.setState({
@@ -213,15 +247,15 @@ class Experiences extends Component {
   };
 
   componentDidUpdate = async (prevProps, prevState) => {
-    if (this.state.userID !== this.props.userID) {
-      this.setState({ userID: this.props.userID }, async () => {
+    if (this.state.userID !== this.props.user_id) {
+      this.setState({ userID: this.props.user_id }, async () => {
         await fetch(
-          apiKey + "/api/profile/" + this.props.userID + "/experiences",
+          apiKey + '/api/profile/' + this.props.user_id + '/experiences',
           {
-            headers: new Headers({
-              "Authorization": "Basic " + this.props.authoKey,
-              "Content-Type": "application/json",
-            }),
+            credentials: 'include',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+            },
           }
         )
           .then((resp) => resp.json())
@@ -239,11 +273,12 @@ class Experiences extends Component {
   };
 
   getExpCsv = () => {
-    const username = this.props.userID;
-    fetch(apiKey + "/api/profile/" + this.props.userID + "/experiences/CSV", {
-      method: "GET",
+    const username = this.props.user_id;
+    fetch(apiKey + '/api/profile/' + this.props.user_id + '/experiences/CSV', {
+      method: 'GET',
+      credentials: 'include',
       headers: {
-        Authorization: "Bearer " + this.props.authoKey,
+        'Access-Control-Allow-Origin': '*',
       },
     })
       .then(function (response) {
@@ -252,9 +287,9 @@ class Experiences extends Component {
       .then(function (data) {
         var blob = new Blob([data]);
         var url = window.URL.createObjectURL(blob);
-        var anchor = document.createElement("a");
-        anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `${username}Experiences.csv`);
+        var anchor = document.createElement('a');
+        anchor.setAttribute('href', url);
+        anchor.setAttribute('download', `${username}Experiences.csv`);
         anchor.click();
         window.URL.revokeObjectURL(url);
       });
@@ -267,18 +302,19 @@ class Experiences extends Component {
           <div className='d-flex justify-content-between'>
             <h4>Experiences</h4>
             <div className='d-flex justify-content-between'>
-              {this.props.userID === this.props.username && (
-                <div
-                  onClick={() =>
-                    this.setState({
-                      showModal: true,
-                      addExperience: true,
-                    })
-                  }
-                >
-                  <AiOutlinePlus />
-                </div>
-              )}
+              {this.props.user_id &&
+                this.props.user_id === this.props.username && (
+                  <div
+                    onClick={() =>
+                      this.setState({
+                        showModal: true,
+                        addExperience: true,
+                      })
+                    }
+                  >
+                    <AiOutlinePlus />
+                  </div>
+                )}
               <div onClick={() => this.getExpCsv()}>
                 <RiDownloadLine />
               </div>
@@ -308,7 +344,7 @@ class Experiences extends Component {
                   </div>
 
                   <div>
-                    {this.props.userID === this.props.username && (
+                    {this.props.user_id === this.props.username && (
                       <div
                         onClick={() => {
                           this.setState({
@@ -334,13 +370,13 @@ class Experiences extends Component {
                 addExperience: false,
                 editExperience: false,
                 newExperience: {
-                  role: "",
-                  company: "",
-                  startDate: "",
-                  endDate: "",
-                  description: "",
-                  area: "",
-                  username: this.props.userID,
+                  role: '',
+                  company: '',
+                  startDate: '',
+                  endDate: '',
+                  description: '',
+                  area: '',
+                  username: this.props.user_id,
                 },
               })
             }

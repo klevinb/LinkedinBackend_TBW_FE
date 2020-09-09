@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Nav,
   Image,
@@ -7,12 +7,12 @@ import {
   Dropdown,
   FormControl,
   Container,
-} from "react-bootstrap";
-import "./NavBar.css";
-import { FaHome, FaSuitcase, FaUserFriends, FaVideo } from "react-icons/fa";
-import { BsChatSquareDots } from "react-icons/bs";
-import { AiOutlineBell } from "react-icons/ai";
-import { Link, withRouter } from "react-router-dom";
+} from 'react-bootstrap';
+import './NavBar.css';
+import { FaHome, FaSuitcase, FaUserFriends, FaVideo } from 'react-icons/fa';
+import { BsChatSquareDots } from 'react-icons/bs';
+import { AiOutlineBell } from 'react-icons/ai';
+import { Link, withRouter } from 'react-router-dom';
 
 class NavBar extends Component {
   render() {
@@ -23,7 +23,7 @@ class NavBar extends Component {
             <div className='d-flex'>
               <Image
                 src='https://touchmba.com/wp-content/uploads/2017/06/LinkedIn-Logo.png'
-                style={{ width: "50px" }}
+                style={{ width: '50px' }}
               />
               <Navbar.Brand href='#home'></Navbar.Brand>
               <Dropdown
@@ -72,20 +72,20 @@ class NavBar extends Component {
                     <Image
                       src={this.props.userImage[0].image}
                       style={{
-                        width: "25px",
-                        height: "25px",
-                        borderRadius: "35%",
-                        margin: "0",
+                        width: '25px',
+                        height: '25px',
+                        borderRadius: '35%',
+                        margin: '0',
                       }}
                     />
                   ) : (
                     <Image
                       src='https://img.icons8.com/officel/2x/user.png'
                       style={{
-                        width: "25px",
-                        height: "25px",
-                        borderRadius: "35%",
-                        margin: "0",
+                        width: '25px',
+                        height: '25px',
+                        borderRadius: '35%',
+                        margin: '0',
                       }}
                     />
                   )}
@@ -96,15 +96,16 @@ class NavBar extends Component {
                     title='Me'
                   >
                     <NavDropdown.Item
-                      onSelect={() => this.props.history.push("/profiles/me")}
+                      onSelect={() => this.props.history.push('/profiles/me')}
                     >
                       My Acc
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onSelect={() =>
-                        (window.parent.location = window.parent.location.href)
+                        (window.parent.location =
+                          window.parent.location.href + 'login')
                       }
-                      style={{ color: "red" }}
+                      style={{ color: 'red' }}
                     >
                       <Link to=''>Log Out</Link>
                     </NavDropdown.Item>

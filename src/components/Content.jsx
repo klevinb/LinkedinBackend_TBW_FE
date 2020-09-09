@@ -1,37 +1,36 @@
-import React, { Component } from "react";
-import { Container, Row } from "react-bootstrap";
-import Jumbotron from "./Jumbotron";
-import SideContent from "./SideContent";
-import UserContent from "./UserContent";
-import Experiences from "./Experiences";
-import { Col, Spinner } from "react-bootstrap";
-import "./MainCss.css";
+import React, { Component } from 'react';
+import { Container, Row } from 'react-bootstrap';
+import Jumbotron from './Jumbotron';
+import SideContent from './SideContent';
+import UserContent from './UserContent';
+import Experiences from './Experiences';
+import { Col, Spinner } from 'react-bootstrap';
+import './MainCss.css';
 
 const apiKey = process.env.REACT_APP_API;
 
 class Content extends Component {
   state = {
-    userInfo: "",
+    userInfo: '',
     userId: this.props.match.params.userID,
     loading: true,
   };
 
   fetchFunction = async () => {
-    let resp = await fetch(apiKey + "/api/profile/" + this.state.userId, {
-      headers: new Headers({
-        "Authorization": "Bearer " + this.props.authoKey,
-        "Content-Type": "application/json",
-      }),
+    let resp = await fetch(apiKey + '/api/profile/' + this.state.userId, {
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
-    if (resp.ok) {
-      let respObj = await resp.json();
-      this.setState({
-        userInfo: respObj,
-        loading: false,
-      });
-      this.props.getUserImg(this.state.userInfo.image);
-    }
+    let respObj = await resp.json();
+    console.log(respObj);
+    this.setState({
+      userInfo: respObj,
+      loading: false,
+    });
+    this.props.getUserImg(this.state.userInfo.image);
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -69,10 +68,10 @@ class Content extends Component {
         {this.state.loading && (
           <div
             className='d-flex justify-content-center align-items-center'
-            style={{ width: "100%", height: "100vh" }}
+            style={{ width: '100%', height: '100vh' }}
           >
             <Spinner
-              style={{ fontSize: "200px" }}
+              style={{ fontSize: '200px' }}
               animation='grow'
               variant='secondary'
             />
@@ -92,24 +91,17 @@ class Content extends Component {
                   username={this.props.username}
                   profileInfo={this.state.userInfo}
                 />
-                {this.state.userId === "me" ? (
-                  <Experiences
-                    username={this.props.username}
-                    authoKey={this.props.authoKey}
-                    userID={this.props.username}
-                  />
-                ) : (
-                  <Experiences
-                    username={this.props.username}
-                    authoKey={this.props.authoKey}
-                    userID={this.state.userId}
-                  />
-                )}
+
+                <Experiences
+                  username={this.props.username}
+                  authoKey={this.props.authoKey}
+                  user_id={this.state.userInfo.username}
+                />
               </Col>
               <Col md={3} className='sideContent pl-4 pt-4'>
                 <SideContent
                   props={this.props}
-                  username={this.props.username}
+                  username={this.state.userInfo.username}
                   authoKey={this.props.authoKey}
                 />
               </Col>

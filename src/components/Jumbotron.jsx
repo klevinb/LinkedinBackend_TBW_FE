@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Button, Col, Image, Row, Modal, Form } from "react-bootstrap";
-import { RiPencilLine } from "react-icons/ri";
-import { FaRegBuilding, FaUniversity } from "react-icons/fa";
-import { TiCameraOutline } from "react-icons/ti";
-import { GiCancel } from "react-icons/gi";
-import { MdAddAPhoto } from "react-icons/md";
+import React, { Component } from 'react';
+import { Button, Col, Image, Row, Modal, Form } from 'react-bootstrap';
+import { RiPencilLine } from 'react-icons/ri';
+import { FaRegBuilding, FaUniversity } from 'react-icons/fa';
+import { TiCameraOutline } from 'react-icons/ti';
+import { GiCancel } from 'react-icons/gi';
+import { MdAddAPhoto } from 'react-icons/md';
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -26,32 +26,34 @@ class JumBotron extends Component {
   };
   handleUpload = async () => {
     const photo = new FormData();
-    photo.append("profile", this.state.profile);
+    photo.append('profile', this.state.profile);
 
     const resp = await fetch(
-      apiKey + "/api/profile/" + this.props.username + "/upload",
+      apiKey + '/api/profile/' + this.props.username + '/upload',
       {
-        method: "POST",
+        method: 'POST',
         body: photo,
-        headers: new Headers({
-          Authorization: "Bearer " + this.props.authoKey,
-        }),
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       }
     );
     if (resp.ok) this.props.refetch();
   };
   handleCoverUpload = async () => {
     const photo = new FormData();
-    photo.append("cover", this.state.cover);
+    photo.append('cover', this.state.cover);
 
     const resp = await fetch(
-      apiKey + "/api/profile/" + this.props.username + "/upload/cover",
+      apiKey + '/api/profile/' + this.props.username + '/upload/cover',
       {
-        method: "POST",
+        method: 'POST',
         body: photo,
-        headers: new Headers({
-          Authorization: "Bearer " + this.props.authoKey,
-        }),
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       }
     );
     if (resp.ok) this.props.refetch();
@@ -59,13 +61,14 @@ class JumBotron extends Component {
 
   editProfileInfo = async (e) => {
     e.preventDefault();
-    let resp = await fetch(apiKey + "/api/profile/" + this.props.username, {
-      method: "PUT",
+    let resp = await fetch(apiKey + '/api/profile/me', {
+      method: 'PUT',
       body: JSON.stringify(this.state.profileInfo),
-      headers: new Headers({
-        "Authorization": "Bearer " + this.props.authoKey,
-        "Content-Type": "application/json",
-      }),
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
     });
 
     if (resp.ok) {
@@ -115,10 +118,11 @@ class JumBotron extends Component {
 
   getPdf = async () => {
     const name = this.props.profileInfo.name;
-    fetch(apiKey + "/api/profile/" + this.props.profileInfo.username + "/pdf", {
-      method: "GET",
+    fetch(apiKey + '/api/profile/' + this.props.profileInfo.username + '/pdf', {
+      method: 'GET',
+      credentials: 'include',
       headers: {
-        Authorization: "Bearer " + this.props.authoKey,
+        'Access-Control-Allow-Origin': '*',
       },
     })
       .then(function (response) {
@@ -129,9 +133,9 @@ class JumBotron extends Component {
         var blob = new Blob([data]);
         var url = window.URL.createObjectURL(blob);
         // attach blob url to anchor element with download attribute
-        var anchor = document.createElement("a");
-        anchor.setAttribute("href", url);
-        anchor.setAttribute("download", `${name}CV.pdf`);
+        var anchor = document.createElement('a');
+        anchor.setAttribute('href', url);
+        anchor.setAttribute('download', `${name}CV.pdf`);
         anchor.click();
         window.URL.revokeObjectURL(url);
       });
@@ -174,7 +178,7 @@ class JumBotron extends Component {
               </h4>
               <h5>
                 {this.props.profileInfo.bio.length > 29
-                  ? this.props.profileInfo.bio.slice(0, 29) + "..."
+                  ? this.props.profileInfo.bio.slice(0, 29) + '...'
                   : this.props.profileInfo.bio}
               </h5>
               <div className='d-flex'>
@@ -207,7 +211,7 @@ class JumBotron extends Component {
                       </div>
                     </div>
                     <input
-                      style={{ display: "none" }}
+                      style={{ display: 'none' }}
                       type='file'
                       id='upload'
                       profile='file'
@@ -215,7 +219,7 @@ class JumBotron extends Component {
                       accept='image/*'
                     />
                     <input
-                      style={{ display: "none" }}
+                      style={{ display: 'none' }}
                       type='file'
                       id='coverUpload'
                       profile='file'
@@ -330,7 +334,7 @@ class JumBotron extends Component {
                     </Form.Group>
                     <label>Image</label>
                     <input
-                      style={{ color: "transparent" }}
+                      style={{ color: 'transparent' }}
                       type='file'
                       id='image'
                       profile='file'
