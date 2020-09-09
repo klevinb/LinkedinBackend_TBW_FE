@@ -305,6 +305,7 @@ class Experiences extends Component {
               {this.props.user_id &&
                 this.props.user_id === this.props.username && (
                   <div
+                    className='pointer'
                     onClick={() =>
                       this.setState({
                         showModal: true,
@@ -315,7 +316,7 @@ class Experiences extends Component {
                     <AiOutlinePlus />
                   </div>
                 )}
-              <div onClick={() => this.getExpCsv()}>
+              <div onClick={() => this.getExpCsv()} className='pointer'>
                 <RiDownloadLine />
               </div>
             </div>

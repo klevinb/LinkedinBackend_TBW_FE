@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Image, Dropdown, Accordion, Button } from "react-bootstrap";
-import { BsThreeDots } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import { AiOutlineLike, AiFillLike } from "react-icons/ai";
-import { GoComment } from "react-icons/go";
-import { FaShare } from "react-icons/fa";
+import React, { Component } from 'react';
+import { Image, Dropdown, Accordion, Button } from 'react-bootstrap';
+import { BsThreeDots } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
+import { AiOutlineLike, AiFillLike } from 'react-icons/ai';
+import { GoComment } from 'react-icons/go';
+import { FaShare } from 'react-icons/fa';
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -14,18 +14,19 @@ class FeedPosts extends Component {
     showDropdown: false,
     comments: [],
     newComment: {
-      comment: "",
+      comment: '',
       user: this.props.userImage[0]._id,
       postid: this.props.info._id,
     },
   };
 
   deletePost = async (id) => {
-    const resp = await fetch(apiKey + "/api/posts/" + id, {
-      method: "DELETE",
-      headers: new Headers({
-        Authorization: "Bearer " + this.props.authoKey,
-      }),
+    const resp = await fetch(apiKey + '/api/posts/' + id, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
     if (resp.ok) {
       this.setState({
@@ -40,11 +41,12 @@ class FeedPosts extends Component {
   };
 
   deleteComment = async (id) => {
-    const resp = await fetch(apiKey + "/api/comments/" + id, {
-      method: "DELETE",
-      headers: new Headers({
-        Authorization: "Bearer " + this.props.authoKey,
-      }),
+    const resp = await fetch(apiKey + '/api/comments/' + id, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
     if (resp.ok) {
       this.fetchComments();
@@ -59,59 +61,66 @@ class FeedPosts extends Component {
     });
   };
   keyPressed = async (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       if (this.state.newComment._id) {
         const commentsUrl =
-          apiKey + "/api/comments/" + this.state.newComment._id;
+          apiKey + '/api/comments/' + this.state.newComment._id;
         const response = await fetch(commentsUrl, {
-          method: "PUT",
+          method: 'PUT',
           body: JSON.stringify(this.state.newComment),
-          headers: new Headers({
-            "Authorization": "Bearer " + this.props.authoKey,
-            "Content-Type": "application/json",
-          }),
+          credentials: 'include',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
         });
         if (response.ok) {
           this.setState({
             newComment: {
-              comment: "",
+              comment: '',
               user: this.props.userImage[0]._id,
               postid: this.props.info._id,
             },
           });
           this.fetchComments();
         } else {
-          alert("An error has occurred");
+          alert('An error has occurred');
         }
       } else {
-        const commentsUrl = apiKey + "/api/comments/";
+        const commentsUrl = apiKey + '/api/comments/';
         const response = await fetch(commentsUrl, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(this.state.newComment),
-          headers: new Headers({
-            "Authorization": "Bearer " + this.props.authoKey,
-            "Content-Type": "application/json",
-          }),
+          credentials: 'include',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-type': 'application/json',
+          },
         });
         if (response.ok) {
           this.setState({
             newComment: {
-              comment: "",
+              comment: '',
               user: this.props.userImage[0]._id,
               postid: this.props.info._id,
             },
           });
           this.fetchComments();
         } else {
-          alert("An error has occurred");
+          alert('An error has occurred');
         }
       }
     }
   };
 
   getSingleComment = async (id) => {
-    const commentsUrl = apiKey + "/api/comments/" + id;
-    let resp = await fetch(commentsUrl);
+    const commentsUrl = apiKey + '/api/comments/' + id;
+    let resp = await fetch(commentsUrl, {
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
     if (resp.ok) {
       const comment = await resp.json();
       this.setState({ newComment: comment });
@@ -123,11 +132,12 @@ class FeedPosts extends Component {
   };
 
   fetchComments = async () => {
-    const commentsUrl = apiKey + "/api/comments/posts/";
+    const commentsUrl = apiKey + '/api/comments/posts/';
     const resp = await fetch(commentsUrl + this.props.info._id, {
-      headers: new Headers({
-        Authorization: "Bearer " + this.props.authoKey,
-      }),
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
     if (resp.ok) {
       const comments = await resp.json();
@@ -137,12 +147,13 @@ class FeedPosts extends Component {
 
   addLike = async (id) => {
     let resp = await fetch(
-      apiKey + "/api/posts/add/" + this.props.info._id + "/like/" + id,
+      apiKey + '/api/posts/add/' + this.props.info._id + '/like/' + id,
       {
-        method: "POST",
-        headers: new Headers({
-          Authorization: "Bearer " + this.props.authoKey,
-        }),
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       }
     );
     if (resp.ok) {
@@ -173,24 +184,24 @@ class FeedPosts extends Component {
         <div className='postHeader d-flex align-items-center p-3'>
           <div className='imgSmall mr-3'>
             {this.props.info.user.image ? (
-              <Link to={"/profiles/" + this.props.info.user.username}>
+              <Link to={'/profiles/' + this.props.info.user.username}>
                 <Image fluid src={this.props.info.user.image} />
               </Link>
             ) : (
-              <Link to={"/profiles/" + this.props.info.user.username}>
+              <Link to={'/profiles/' + this.props.info.user.username}>
                 <Image fluid src='https://img.icons8.com/officel/2x/user.png' />
               </Link>
             )}
           </div>
           <div className='d-flex flex-column'>
             <h6 className='m-0'>
-              <Link to={"/profiles/" + this.props.info.user.username}>
-                {this.props.info.user.name + " " + this.props.info.user.surname}
+              <Link to={'/profiles/' + this.props.info.user.username}>
+                {this.props.info.user.name + ' ' + this.props.info.user.surname}
               </Link>
             </h6>
             <label className='m-0'>{this.props.info.user.title}</label>
             <label className='m-0'>
-              {this.props.info.createdAt.slice(0, 10)}{" "}
+              {this.props.info.createdAt.slice(0, 10)}{' '}
               {this.props.info.createdAt.slice(11, 19)}
             </label>
           </div>
@@ -225,7 +236,7 @@ class FeedPosts extends Component {
           )}
         </div>
         <div className='postImage p-3'>
-          <p style={{ wordWrap: "break-word" }}>{this.props.info.text}</p>
+          <p style={{ wordWrap: 'break-word' }}>{this.props.info.text}</p>
           {this.props.info.image && <Image src={this.props.info.image} />}
         </div>
         <div className='p-3'>
@@ -236,23 +247,36 @@ class FeedPosts extends Component {
               {this.props.info.likes.find(
                 (user) => user.username === this.props.username
               ) !== undefined ? (
-                <div onClick={() => this.addLike(this.props.userImage[0]._id)}>
+                <div
+                  className='pointer'
+                  onClick={() => this.addLike(this.props.userImage[0]._id)}
+                >
                   <AiFillLike /> Liked
                 </div>
               ) : (
-                <div onClick={() => this.addLike(this.props.userImage[0]._id)}>
+                <div
+                  className='pointer'
+                  onClick={() => this.addLike(this.props.userImage[0]._id)}
+                >
                   <AiOutlineLike /> Like
                 </div>
               )}
               <Accordion.Toggle
-                style={{ color: "black", margin: "0", textDecoration: "none" }}
+                style={{
+                  color: 'black',
+                  margin: '0',
+                  textDecoration: 'none',
+                  padding: '0px',
+                }}
                 as={Button}
                 variant='link'
                 eventKey='1'
               >
                 <GoComment /> Comment
               </Accordion.Toggle>
-              <FaShare /> Share
+              <div className='pointer'>
+                <FaShare /> Share
+              </div>
             </div>
 
             <Accordion.Collapse eventKey='1'>
@@ -299,7 +323,7 @@ class FeedPosts extends Component {
                                   {this.props.users.find(
                                     (user) =>
                                       user.username === comment.user.username
-                                  ).name + " "}
+                                  ).name + ' '}
                                   {
                                     this.props.users.find(
                                       (user) =>

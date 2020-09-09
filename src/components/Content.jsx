@@ -25,11 +25,11 @@ class Content extends Component {
     });
 
     let respObj = await resp.json();
-    console.log(respObj);
     this.setState({
       userInfo: respObj,
       loading: false,
     });
+
     this.props.getUserImg(this.state.userInfo.image);
   };
 
@@ -59,6 +59,9 @@ class Content extends Component {
   };
 
   componentDidMount = () => {
+    if (this.props.history.location.search) {
+      this.props.getAuthorization(this.props.history.location.search.slice(1));
+    }
     this.fetchFunction();
   };
 

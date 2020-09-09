@@ -253,6 +253,10 @@
   margin-left: 20px;
   color: rgb(100, 100, 100);
 }
+.commentIcons {
+  display: flex;
+  justify-content: space-around;
+}
 
 .commentIcons svg {
   font-size: 28px;
@@ -356,7 +360,24 @@
   right: 0%;
   font-size: 23px;
   text-decoration: none;
-  width: 300px;
+  width: 200px;
+}
+
+.logins {
+  display: flex;
+}
+
+.logins img {
+  width: 100%;
+  margin-top: 10px;
+  height: 50px;
+}
+.logins a {
+  width: 50%;
+  padding: 10px;
+}
+.pointer {
+  cursor: pointer;
 }
 
 #chatRoom .card {
@@ -405,13 +426,12 @@
 .chat-box .card {
   max-height: 400px;
   width: 350px !important;
-  overflow-x: auto;
 }
 
 .chat-box .card-body ul {
   max-height: 220px;
   height: 220px;
-  overflow-x: auto;
+
   padding: 0;
   font-size: 20px;
   padding-left: 10px;

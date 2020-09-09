@@ -152,13 +152,14 @@ class App extends Component {
               <Content
                 {...props}
                 username={this.props.username}
+                getAuthorization={this.props.getAuthorization}
                 authoKey={this.props.authoKey}
                 getUserImg={this.getUserImg}
               />
             )}
           />
           <Footer />
-          {this.state.users.length > 1 && (
+          {this.state.users.length > 1 && this.props.username && (
             <Messages
               users={this.state.users}
               username={this.props.username}

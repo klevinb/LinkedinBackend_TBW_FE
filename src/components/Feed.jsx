@@ -33,10 +33,10 @@ class Feed extends Component {
 
   fetchPosts = async () => {
     await fetch(apiKey + '/api/posts/', {
-      headers: new Headers({
-        'Authorization': 'Bearer ' + this.props.authoKey,
-        'Content-Type': 'application/json',
-      }),
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     })
       .then((resp) => resp.json())
       .then((respObj) =>
@@ -48,7 +48,12 @@ class Feed extends Component {
   };
 
   getSinglePost = async (id) => {
-    let resp = await fetch(apiKey + '/api/posts/' + id);
+    let resp = await fetch(apiKey + '/api/posts/' + id, {
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
     if (resp.ok) {
       const post = await resp.json();
       this.setState({ newPost: post, showModal: true });
@@ -92,10 +97,11 @@ class Feed extends Component {
       const resp = await fetch(apiKey + '/api/posts/' + id, {
         method: 'PUT',
         body: JSON.stringify(this.state.newPost),
-        headers: new Headers({
-          'Authorization': 'Bearer ' + this.props.authoKey,
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
-        }),
+        },
       });
       if (resp.ok) {
         this.setState({
@@ -111,9 +117,10 @@ class Feed extends Component {
       const resp2 = await fetch(apiKey + '/api/posts/' + id + '/upload', {
         method: 'POST',
         body: this.state.image,
-        headers: new Headers({
-          Authorization: 'Bearer ' + this.props.authoKey,
-        }),
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       });
 
       if (resp2.ok) this.fetchPosts();
@@ -121,10 +128,11 @@ class Feed extends Component {
       const resp = await fetch(apiKey + '/api/posts/', {
         method: 'POST',
         body: JSON.stringify(this.state.newPost),
-        headers: new Headers({
-          'Authorization': 'Bearer ' + this.props.authoKey,
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
-        }),
+        },
       });
 
       if (resp.ok) this.setState({ showModal: false });
@@ -133,9 +141,10 @@ class Feed extends Component {
       const resp2 = await fetch(apiKey + '/api/posts/' + id + '/upload', {
         method: 'POST',
         body: this.state.image,
-        headers: new Headers({
-          Authorization: 'Bearer ' + this.props.authoKey,
-        }),
+        credentials: 'include',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       });
 
       if (resp2.ok) this.fetchPosts();
@@ -173,9 +182,7 @@ class Feed extends Component {
                   {this.props.users &&
                     this.props.users
                       .filter((user) => user.username === this.props.username)
-                      .map((user, i) => (
-                        <LeftSideBar key={user._id} info={user} />
-                      ))}
+                      .map((user, i) => <LeftSideBar key={i} info={user} />)}
                 </Col>
                 <Col md={6} className='d-flex flex-column mb-3 '>
                   <FeedContent addNewPost={this.showModal} />
@@ -185,7 +192,7 @@ class Feed extends Component {
                       <FeedPosts
                         username={this.props.username}
                         getSinglePost={this.getSinglePost}
-                        key={post._id}
+                        key={i}
                         reFetchData={this.reFetchData}
                         users={this.props.users}
                         authoKey={this.props.authoKey}

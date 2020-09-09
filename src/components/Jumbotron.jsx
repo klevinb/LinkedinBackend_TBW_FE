@@ -145,8 +145,9 @@ class JumBotron extends Component {
     return (
       <div id='jumbotronMain' className='contentCol box-shadow '>
         <div id='cameraIcon'>
+          {console.log(this.props.profileInfo.username, this.props.username)}
           {this.props.profileInfo.username === this.props.username && (
-            <label htmlFor='coverUpload'>
+            <label htmlFor='coverUpload' className='pointer'>
               <TiCameraOutline />
             </label>
           )}
@@ -160,7 +161,7 @@ class JumBotron extends Component {
         </div>
         <div id='profilePhoto'>
           {this.props.profileInfo.username === this.props.username && (
-            <label htmlFor='upload' id='editPhoto'>
+            <label htmlFor='upload' id='editPhoto' className='pointer'>
               <MdAddAPhoto />
             </label>
           )}
@@ -201,6 +202,7 @@ class JumBotron extends Component {
                         More ...
                       </Button>
                       <div
+                        className='pointer'
                         onClick={() =>
                           this.setState({
                             editProfile: !this.state.editProfile,

@@ -69,7 +69,7 @@ class Messages extends Component {
         {this.props.username && (
           <div className='App Chat'>
             <Accordion id='chatRoom'>
-              <Card style={{ width: '300px' }} className='flex-column-reverse'>
+              <Card className='flex-column-reverse'>
                 <Card.Header>
                   <Accordion.Toggle eventKey='0'>
                     <Image src={this.props.userImage[0].image} />

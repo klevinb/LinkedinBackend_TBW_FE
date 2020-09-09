@@ -58,7 +58,7 @@ class SideContent extends React.Component {
           .filter((user) => user.username !== this.props.username)
           .map((user, i) => {
             return (
-              <Row key={i} className='pb-3 d-flex align-items-center'>
+              <Row key={i} className='pb-3 pointer d-flex align-items-center'>
                 <Col md={4}>
                   {!user.image ? (
                     <Image

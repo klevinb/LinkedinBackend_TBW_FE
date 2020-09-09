@@ -104,7 +104,7 @@ class Login extends Component {
     if (resp.ok) {
       this.props.getAuthorization(this.state.user.credentials);
 
-      this.props.history.push('/profiles/me');
+      this.props.history.push('/profiles/me?' + this.state.user.credentials);
     } else {
       this.setState({ signup: true, fromLogin: true });
     }
@@ -186,13 +186,15 @@ class Login extends Component {
               <Button block type='submit'>
                 Login
               </Button>
-              <a href='http://localhost:3008/api/profile/auth/facebook'>
-                FACEEEEEEBOOOK
-              </a>
+              <div className='logins'>
+                <a href='http://localhost:3008/api/profile/auth/facebook'>
+                  <Image src='/assets/Sign-In-Large_FB.png' />
+                </a>
+                <a href='http://localhost:3008/api/profile/auth/linkedin'>
+                  <Image src='/assets/Sign-In-Large.png' />
+                </a>
+              </div>
               <br />
-              <a href='http://localhost:3008/api/profile/auth/linkedin'>
-                Linkedinnn
-              </a>
 
               <div className='d-flex justify-content-center mt-2'>
                 <Button

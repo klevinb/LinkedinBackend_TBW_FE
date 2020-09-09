@@ -10,6 +10,7 @@ class MyApp extends Component {
 
   getAuthorization = (username) => {
     localStorage.setItem('username', username);
+    this.setState({ username });
   };
   resetAuthorization = () => {
     localStorage.removeItem('username');
@@ -17,8 +18,8 @@ class MyApp extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.state.username && prevState.username !== this.state.username) {
-      this.setState(this.state);
+    if (prevState.username !== this.state.username) {
+      this.setState({ username: this.state.username });
     }
   };
 
@@ -37,7 +38,10 @@ class MyApp extends Component {
               />
             )}
           />
-          <App username={this.state.username} />
+          <App
+            username={this.state.username}
+            getAuthorization={this.getAuthorization}
+          />
         </Router>
       </>
     );
