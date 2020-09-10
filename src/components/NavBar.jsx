@@ -101,10 +101,20 @@ class NavBar extends Component {
                       My Acc
                     </NavDropdown.Item>
                     <NavDropdown.Item
-                      onSelect={() =>
-                        (window.parent.location =
-                          window.parent.location.href + 'login')
-                      }
+                      onSelect={async () => {
+                        await fetch(
+                          process.env.REACT_APP_API + '/api/profile/logout',
+                          {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                              'Access-Control-Allow-Origin': '*',
+                            },
+                          }
+                        )(
+                          (window.parent.location = window.parent.location.href)
+                        );
+                      }}
                       style={{ color: 'red' }}
                     >
                       <Link to=''>Log Out</Link>

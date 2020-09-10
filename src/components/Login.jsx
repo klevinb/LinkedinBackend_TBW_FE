@@ -144,7 +144,7 @@ class Login extends Component {
     photo.append('profile', this.state.photo);
     const id = await resp.json();
 
-    await fetch(apiKey + '/api/profile/' + id + '/upload', {
+    const resp2 = await fetch(apiKey + '/api/profile/' + id + '/upload', {
       method: 'POST',
       body: photo,
       credentials: 'include',
@@ -153,7 +153,7 @@ class Login extends Component {
       },
     });
 
-    this.props.history.push('/');
+    this.setState({ signup: false, login: true });
   };
 
   render() {
@@ -187,10 +187,18 @@ class Login extends Component {
                 Login
               </Button>
               <div className='logins'>
-                <a href='http://localhost:3008/api/profile/auth/facebook'>
+                <a
+                  href={
+                    process.env.REACT_APP_API + '/api/profile/auth/facebook'
+                  }
+                >
                   <Image src='/assets/Sign-In-Large_FB.png' />
                 </a>
-                <a href='http://localhost:3008/api/profile/auth/linkedin'>
+                <a
+                  href={
+                    process.env.REACT_APP_API + '/api/profile/auth/linkedin'
+                  }
+                >
                   <Image src='/assets/Sign-In-Large.png' />
                 </a>
               </div>
@@ -242,7 +250,7 @@ class Login extends Component {
                   src='https://cdn.worldvectorlogo.com/logos/linkedin.svg'
                 />
                 <form>
-                  <FormGroup controlId='username'>
+                  <FormGroup>
                     <label>Username</label>
                     <FormControl
                       autoFocus
@@ -252,7 +260,7 @@ class Login extends Component {
                       onChange={(e) => this.handleChange(e)}
                     />
                   </FormGroup>
-                  <FormGroup controlId='email'>
+                  <FormGroup>
                     <label>Email</label>
                     <FormControl
                       value={this.state.newUser.email}
@@ -261,7 +269,7 @@ class Login extends Component {
                       id='email'
                     />
                   </FormGroup>
-                  <FormGroup controlId='password'>
+                  <FormGroup>
                     <label>Password</label>
                     <FormControl
                       value={this.state.newUser.password}
@@ -306,7 +314,7 @@ class Login extends Component {
                         />
                         <Row>
                           <Col>
-                            <FormGroup controlId='name'>
+                            <FormGroup>
                               <label>Name</label>
                               <FormControl
                                 autoFocus
@@ -316,7 +324,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='surname'>
+                            <FormGroup>
                               <label>Surname</label>
                               <FormControl
                                 autoFocus
@@ -326,7 +334,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='about'>
+                            <FormGroup>
                               <label>About You</label>
                               <FormControl
                                 autoFocus
@@ -338,7 +346,7 @@ class Login extends Component {
                             </FormGroup>
                           </Col>
                           <Col>
-                            <FormGroup controlId='bio'>
+                            <FormGroup>
                               <label>Bio</label>
                               <FormControl
                                 autoFocus
@@ -348,7 +356,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='title'>
+                            <FormGroup>
                               <label>Title</label>
                               <FormControl
                                 autoFocus
@@ -358,7 +366,7 @@ class Login extends Component {
                                 onChange={(e) => this.handleChangeProfile(e)}
                               />
                             </FormGroup>
-                            <FormGroup controlId='area'>
+                            <FormGroup>
                               <label>Area</label>
                               <FormControl
                                 autoFocus
@@ -370,7 +378,7 @@ class Login extends Component {
                             </FormGroup>
                           </Col>
                         </Row>
-                        <Button block bsSize='small' type='submit'>
+                        <Button block type='submit'>
                           Add Info
                         </Button>
                       </Container>

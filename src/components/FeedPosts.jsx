@@ -180,204 +180,218 @@ class FeedPosts extends Component {
 
   render() {
     return (
-      <div className='postContent box-shadow  mb-2'>
-        <div className='postHeader d-flex align-items-center p-3'>
-          <div className='imgSmall mr-3'>
-            {this.props.info.user.image ? (
-              <Link to={'/profiles/' + this.props.info.user.username}>
-                <Image fluid src={this.props.info.user.image} />
-              </Link>
-            ) : (
-              <Link to={'/profiles/' + this.props.info.user.username}>
-                <Image fluid src='https://img.icons8.com/officel/2x/user.png' />
-              </Link>
-            )}
-          </div>
-          <div className='d-flex flex-column'>
-            <h6 className='m-0'>
-              <Link to={'/profiles/' + this.props.info.user.username}>
-                {this.props.info.user.name + ' ' + this.props.info.user.surname}
-              </Link>
-            </h6>
-            <label className='m-0'>{this.props.info.user.title}</label>
-            <label className='m-0'>
-              {this.props.info.createdAt.slice(0, 10)}{' '}
-              {this.props.info.createdAt.slice(11, 19)}
-            </label>
-          </div>
-          {this.props.username === this.props.info.username && (
-            <>
-              <div className='postOptions'>
-                <div
-                  onClick={() =>
-                    this.setState({ showDropdown: !this.state.showDropdown })
-                  }
-                >
-                  <BsThreeDots />
-                </div>
-              </div>
-              <div className='dropDownMenu'>
-                <Dropdown.Menu show={this.state.showDropdown}>
-                  <Dropdown.Item
-                    onSelect={() =>
-                      this.props.getSinglePost(this.props.info._id)
-                    }
-                  >
-                    Edit
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onSelect={() => this.deletePost(this.props.info._id)}
-                  >
-                    Delete
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </div>
-            </>
-          )}
-        </div>
-        <div className='postImage p-3'>
-          <p style={{ wordWrap: 'break-word' }}>{this.props.info.text}</p>
-          {this.props.info.image && <Image src={this.props.info.image} />}
-        </div>
-        <div className='p-3'>
-          <hr></hr>
-          <p>{this.props.info.likes.length} person likes this post</p>
-          <Accordion defaultActiveKey=''>
-            <div className='commentIcons d-flex'>
-              {this.props.info.likes.find(
-                (user) => user.username === this.props.username
-              ) !== undefined ? (
-                <div
-                  className='pointer'
-                  onClick={() => this.addLike(this.props.userImage[0]._id)}
-                >
-                  <AiFillLike /> Liked
-                </div>
-              ) : (
-                <div
-                  className='pointer'
-                  onClick={() => this.addLike(this.props.userImage[0]._id)}
-                >
-                  <AiOutlineLike /> Like
-                </div>
-              )}
-              <Accordion.Toggle
-                style={{
-                  color: 'black',
-                  margin: '0',
-                  textDecoration: 'none',
-                  padding: '0px',
-                }}
-                as={Button}
-                variant='link'
-                eventKey='1'
-              >
-                <GoComment /> Comment
-              </Accordion.Toggle>
-              <div className='pointer'>
-                <FaShare /> Share
-              </div>
-            </div>
-
-            <Accordion.Collapse eventKey='1'>
-              <div
-                className='d-flex flex-column ml-3'
-                style={{ display: "'" + this.state.showComments + "'" }}
-              >
-                <div className='commentImg d-flex'>
-                  {this.props.userImage ? (
-                    <Image src={this.props.userImage[0].image} />
-                  ) : (
-                    <Image src='https://img.icons8.com/officel/2x/user.png' />
-                  )}
-                  <div className='inputComment'>
-                    <input
-                      className='comment'
-                      onChange={this.addComment}
-                      onKeyPress={this.keyPressed}
-                      type='text'
-                      value={this.state.newComment.comment}
-                      placeholder='Write a new comment'
+      <>
+        {this.props.info.user && (
+          <div className='postContent box-shadow  mb-2'>
+            <div className='postHeader d-flex align-items-center p-3'>
+              <div className='imgSmall mr-3'>
+                {this.props.info.user && this.props.info.user.image ? (
+                  <Link to={'/profiles/' + this.props.info.user.username}>
+                    <Image fluid src={this.props.info.user.image} />
+                  </Link>
+                ) : (
+                  <Link to={'/profiles/' + this.props.info.user.username}>
+                    <Image
+                      fluid
+                      src='https://img.icons8.com/officel/2x/user.png'
                     />
+                  </Link>
+                )}
+              </div>
+              <div className='d-flex flex-column'>
+                <h6 className='m-0'>
+                  <Link to={'/profiles/' + this.props.info.user.username}>
+                    {this.props.info.user.name +
+                      ' ' +
+                      this.props.info.user.surname}
+                  </Link>
+                </h6>
+                <label className='m-0'>{this.props.info.user.title}</label>
+                <label className='m-0'>
+                  {this.props.info.createdAt.slice(0, 10)}{' '}
+                  {this.props.info.createdAt.slice(11, 19)}
+                </label>
+              </div>
+              {this.props.username === this.props.info.username && (
+                <>
+                  <div className='postOptions'>
+                    <div
+                      onClick={() =>
+                        this.setState({
+                          showDropdown: !this.state.showDropdown,
+                        })
+                      }
+                    >
+                      <BsThreeDots />
+                    </div>
+                  </div>
+                  <div className='dropDownMenu'>
+                    <Dropdown.Menu show={this.state.showDropdown}>
+                      <Dropdown.Item
+                        onSelect={() =>
+                          this.props.getSinglePost(this.props.info._id)
+                        }
+                      >
+                        Edit
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onSelect={() => this.deletePost(this.props.info._id)}
+                      >
+                        Delete
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className='postImage p-3'>
+              <p style={{ wordWrap: 'break-word' }}>{this.props.info.text}</p>
+              {this.props.info.image && <Image src={this.props.info.image} />}
+            </div>
+            <div className='p-3'>
+              <hr></hr>
+              <p>{this.props.info.likes.length} person likes this post</p>
+              <Accordion defaultActiveKey=''>
+                <div className='commentIcons d-flex'>
+                  {this.props.info.likes.find(
+                    (user) => user.username === this.props.username
+                  ) !== undefined ? (
+                    <div
+                      className='pointer'
+                      onClick={() => this.addLike(this.props.userImage[0]._id)}
+                    >
+                      <AiFillLike /> Liked
+                    </div>
+                  ) : (
+                    <div
+                      className='pointer'
+                      onClick={() => this.addLike(this.props.userImage[0]._id)}
+                    >
+                      <AiOutlineLike /> Like
+                    </div>
+                  )}
+                  <Accordion.Toggle
+                    style={{
+                      color: 'black',
+                      margin: '0',
+                      textDecoration: 'none',
+                      padding: '0px',
+                    }}
+                    as={Button}
+                    variant='link'
+                    eventKey='1'
+                  >
+                    <GoComment /> Comment
+                  </Accordion.Toggle>
+                  <div className='pointer'>
+                    <FaShare /> Share
                   </div>
                 </div>
-                <div className='mt-3 mr-3'>
-                  {this.state.comments.length > 0 && this.props.users && (
-                    <>
-                      <div>
-                        {this.state.comments.map((comment, i) => (
-                          <>
-                            <div key={i} className='commentImg d-flex'>
-                              <div>
-                                <Image
-                                  src={
-                                    this.props.users.find(
-                                      (user) =>
-                                        user.username === comment.user.username
-                                    ).image
-                                  }
-                                />
-                              </div>
-                              <div className='inputComment ml-3'>
-                                <h6>
-                                  {this.props.users.find(
-                                    (user) =>
-                                      user.username === comment.user.username
-                                  ).name + ' '}
-                                  {
-                                    this.props.users.find(
-                                      (user) =>
-                                        user.username === comment.user.username
-                                    ).surname
-                                  }
-                                </h6>
-                                {comment.comment}
-                              </div>
-                              {this.props.username ===
-                                comment.user.username && (
-                                <>
-                                  <div className=''>
-                                    <Dropdown>
-                                      <Dropdown.Toggle
-                                        variant='warning'
-                                        id='dropdown-basic'
-                                      ></Dropdown.Toggle>
 
-                                      <Dropdown.Menu className='text-center'>
-                                        <a
-                                          className='dropdown-item'
-                                          onClick={() =>
-                                            this.editComment(comment._id)
-                                          }
-                                        >
-                                          Edit
-                                        </a>
-
-                                        <a
-                                          className='dropdown-item'
-                                          onClick={() =>
-                                            this.deleteComment(comment._id)
-                                          }
-                                        >
-                                          Delete
-                                        </a>
-                                      </Dropdown.Menu>
-                                    </Dropdown>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          </>
-                        ))}
+                <Accordion.Collapse eventKey='1'>
+                  <div
+                    className='d-flex flex-column ml-3'
+                    style={{ display: "'" + this.state.showComments + "'" }}
+                  >
+                    <div className='commentImg d-flex'>
+                      {this.props.userImage ? (
+                        <Image src={this.props.userImage[0].image} />
+                      ) : (
+                        <Image src='https://img.icons8.com/officel/2x/user.png' />
+                      )}
+                      <div className='inputComment'>
+                        <input
+                          className='comment'
+                          onChange={this.addComment}
+                          onKeyPress={this.keyPressed}
+                          type='text'
+                          value={this.state.newComment.comment}
+                          placeholder='Write a new comment'
+                        />
                       </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </Accordion.Collapse>
-          </Accordion>
-        </div>
-      </div>
+                    </div>
+                    <div className='mt-3 mr-3'>
+                      {this.state.comments.length > 0 && this.props.users && (
+                        <>
+                          <div>
+                            {this.state.comments.map((comment, i) => (
+                              <>
+                                <div key={i} className='commentImg d-flex'>
+                                  <div>
+                                    <Image
+                                      src={
+                                        this.props.users.find(
+                                          (user) =>
+                                            user.username ===
+                                            comment.user.username
+                                        ).image
+                                      }
+                                    />
+                                  </div>
+                                  <div className='inputComment ml-3'>
+                                    <h6>
+                                      {this.props.users.find(
+                                        (user) =>
+                                          user.username ===
+                                          comment.user.username
+                                      ).name + ' '}
+                                      {
+                                        this.props.users.find(
+                                          (user) =>
+                                            user.username ===
+                                            comment.user.username
+                                        ).surname
+                                      }
+                                    </h6>
+                                    {comment.comment}
+                                  </div>
+                                  {this.props.username ===
+                                    comment.user.username && (
+                                    <>
+                                      <div className=''>
+                                        <Dropdown>
+                                          <Dropdown.Toggle
+                                            variant='warning'
+                                            id='dropdown-basic'
+                                          ></Dropdown.Toggle>
+
+                                          <Dropdown.Menu className='text-center'>
+                                            <a
+                                              className='dropdown-item'
+                                              onClick={() =>
+                                                this.editComment(comment._id)
+                                              }
+                                            >
+                                              Edit
+                                            </a>
+
+                                            <a
+                                              className='dropdown-item'
+                                              onClick={() =>
+                                                this.deleteComment(comment._id)
+                                              }
+                                            >
+                                              Delete
+                                            </a>
+                                          </Dropdown.Menu>
+                                        </Dropdown>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              </>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </Accordion.Collapse>
+              </Accordion>
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 }

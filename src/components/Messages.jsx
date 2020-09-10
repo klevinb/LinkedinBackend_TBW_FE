@@ -32,13 +32,47 @@ class Messages extends Component {
   };
 
   createChat = (name, username, img) => {
-    console.log(this.state.onlineUsers);
-    const itemArray = this.state.itemArray;
+    if (this.state.itemArray.length < 2) {
+      const itemArray = this.state.itemArray;
+      const user = {
+        chatName: name,
+        src: img,
+        sendToUser: username,
+      };
 
-    const chatName = name;
-    const src = img;
-    const sendToUser = username;
-    itemArray.push({ chatName, sendToUser, src });
+      const find = this.state.itemArray.find(
+        (usr) => usr.chatName === user.chatName
+      );
+
+      if (!find) {
+        itemArray.push(user);
+        this.setState({ itemArray });
+      }
+    } else {
+      const itemArray = this.state.itemArray;
+
+      const user = {
+        chatName: name,
+        src: img,
+        sendToUser: username,
+      };
+
+      const find = this.state.itemArray.find(
+        (usr) => usr.chatName === user.chatName
+      );
+
+      if (!find) {
+        itemArray[1] = user;
+        this.setState({ itemArray });
+      }
+    }
+  };
+
+  removeChat = (chatName) => {
+    const itemArray = this.state.itemArray.filter(
+      (chat) => chat.chatName !== chatName
+    );
+
     this.setState({ itemArray });
   };
 
@@ -46,22 +80,32 @@ class Messages extends Component {
     const connectionOpt = {
       transports: ['websocket'],
     };
-    this.socket = io('https://striveschool.herokuapp.com/', connectionOpt);
-    this.socket.on('chatmessage', (msg) => {
+    this.socket = io('http://localhost:3008', connectionOpt);
+    this.socket.on('message', (msg) => {
       this.props.fetchMesagges(this.props.username);
     });
 
-    this.socket.on('list', (data) => {
+    this.socket.on('online', (data) => {
       this.setState({ onlineUsers: data });
     });
     this.setUsername();
   };
 
   setUsername = () => {
+    console.log(this.props.username);
     this.socket.emit('setUsername', {
       username: this.props.username,
     });
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.itemArray !== this.state.itemArray) {
+      this.setState({ itemArray: this.state.itemArray });
+    }
+    if (prevProps.username !== this.props.username) {
+      this.setUsername();
+    }
+  }
 
   render() {
     return (
@@ -72,7 +116,11 @@ class Messages extends Component {
               <Card className='flex-column-reverse'>
                 <Card.Header>
                   <Accordion.Toggle eventKey='0'>
-                    <Image src={this.props.userImage[0].image} />
+                    {this.props.userImage[0].image ? (
+                      <Image src={this.props.userImage[0].image} />
+                    ) : (
+                      <Image src='https://img.icons8.com/officel/2x/user.png' />
+                    )}
                     {`Messaging `}
                   </Accordion.Toggle>
                 </Card.Header>
@@ -86,11 +134,20 @@ class Messages extends Component {
                             const currentUser = this.props.users.find(
                               (user) => user.username === userName
                             );
-                            if (!currentUser) return <div>user not found</div>;
+                            if (!currentUser)
+                              return (
+                                <ListGroupItem
+                                  className='d-flex justify-self-center text-center'
+                                  style={{ fontSize: '12px' }}
+                                >
+                                  user not found
+                                </ListGroupItem>
+                              );
 
                             return (
                               <ListGroupItem key={key}>
-                                <Row
+                                <div
+                                  className='onlineUser'
                                   onClick={() =>
                                     this.createChat(
                                       currentUser.name,
@@ -99,13 +156,19 @@ class Messages extends Component {
                                     )
                                   }
                                 >
-                                  <Col sm={3}>
+                                  {currentUser.image ? (
                                     <Image fluid src={currentUser.image} />
-                                  </Col>
-                                  <Col sm={9}>
+                                  ) : (
+                                    <Image
+                                      fluid
+                                      src='https://img.icons8.com/officel/2x/user.png'
+                                    />
+                                  )}
+
+                                  <p>
                                     {currentUser.name} {currentUser.surname}
-                                  </Col>
-                                </Row>
+                                  </p>
+                                </div>
                               </ListGroupItem>
                             );
                           })}
@@ -121,6 +184,7 @@ class Messages extends Component {
                     <ChatBox
                       key={key}
                       username={this.props.username}
+                      removeChat={this.removeChat}
                       sendToUser={item.sendToUser}
                       chatName={item.chatName}
                       src={item.src}

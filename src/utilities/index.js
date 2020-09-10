@@ -1,12 +1,16 @@
 export const fetchMessagesThunk = (username) => {
   return (dispatch, getState) => {
-    fetch("https://striveschool-test.herokuapp.com/api/messages/" + username, {
-      method: "GET",
+    fetch(process.env.REACT_APP_API + '/api/profile/messages/' + username, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     })
       .then((res) => res.json())
       .then((respObj) =>
         dispatch({
-          type: "FETCH_MESSAGES",
+          type: 'FETCH_MESSAGES',
           payload: respObj,
         })
       );

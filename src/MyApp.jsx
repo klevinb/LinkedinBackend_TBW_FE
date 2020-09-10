@@ -28,7 +28,7 @@ class MyApp extends Component {
       <>
         <Router>
           <Route
-            path='/login'
+            path='/'
             exact
             render={(props) => (
               <Login

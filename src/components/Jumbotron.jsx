@@ -145,7 +145,6 @@ class JumBotron extends Component {
     return (
       <div id='jumbotronMain' className='contentCol box-shadow '>
         <div id='cameraIcon'>
-          {console.log(this.props.profileInfo.username, this.props.username)}
           {this.props.profileInfo.username === this.props.username && (
             <label htmlFor='coverUpload' className='pointer'>
               <TiCameraOutline />

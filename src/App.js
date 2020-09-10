@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchMessagesThunk } from './utilities';
 import Messages from './components/Messages';
+import { withRouter } from 'react-router-dom';
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -90,44 +91,47 @@ class App extends Component {
 
   render() {
     return (
-      // <Router>
       <div className='App'>
         <Container className='m-0 p-0' fluid>
-          <NavBar
-            setSearch={this.setSearch}
-            searchValue={this.state.search}
-            status={this.state.show}
-            userImage={
-              this.state.users.length > 0 &&
-              this.state.users.filter(
-                (user) => user.username === this.props.username
-              )
-            }
-            changeStatus={this.changeStatus}
-            users={
-              this.state.users &&
-              this.state.search &&
-              this.state.users.filter((user) =>
-                user.name
-                  .toLowerCase()
-                  .startsWith(this.state.search.toLowerCase())
-              ).length > 0 ? (
-                this.state.users
-                  .filter((user) =>
-                    user.name
-                      .toLowerCase()
-                      .startsWith(this.state.search.toLowerCase())
-                  )
-                  .map((user, i) => (
-                    <Dropdown.Item key={i}>
-                      <Link to={'/profiles/' + user.username}>{user.name}</Link>
-                    </Dropdown.Item>
-                  ))
-              ) : (
-                <Dropdown.Item>No user with that name</Dropdown.Item>
-              )
-            }
-          />
+          {!this.props.match.isExact && (
+            <NavBar
+              setSearch={this.setSearch}
+              searchValue={this.state.search}
+              status={this.state.show}
+              userImage={
+                this.state.users.length > 0 &&
+                this.state.users.filter(
+                  (user) => user.username === this.props.username
+                )
+              }
+              changeStatus={this.changeStatus}
+              users={
+                this.state.users &&
+                this.state.search &&
+                this.state.users.filter((user) =>
+                  user.name
+                    .toLowerCase()
+                    .startsWith(this.state.search.toLowerCase())
+                ).length > 0 ? (
+                  this.state.users
+                    .filter((user) =>
+                      user.name
+                        .toLowerCase()
+                        .startsWith(this.state.search.toLowerCase())
+                    )
+                    .map((user, i) => (
+                      <Dropdown.Item key={i}>
+                        <Link to={'/profiles/' + user.username}>
+                          {user.name}
+                        </Link>
+                      </Dropdown.Item>
+                    ))
+                ) : (
+                  <Dropdown.Item>No user with that name</Dropdown.Item>
+                )
+              }
+            />
+          )}
           <Route
             path='/feed'
             exact
@@ -158,7 +162,7 @@ class App extends Component {
               />
             )}
           />
-          <Footer />
+          {!this.props.match.isExact && <Footer />}
           {this.state.users.length > 1 && this.props.username && (
             <Messages
               users={this.state.users}
@@ -173,9 +177,8 @@ class App extends Component {
           )}
         </Container>
       </div>
-      // </Router>
     );
   }
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(withRouter(App));

@@ -258,6 +258,10 @@
   justify-content: space-around;
 }
 
+.dropdown-item {
+  cursor: pointer;
+}
+
 .commentIcons svg {
   font-size: 28px;
   margin-left: 20px;
@@ -357,7 +361,7 @@
   position: fixed;
   bottom: 0%;
   height: auto;
-  right: 0%;
+  right: 1%;
   font-size: 23px;
   text-decoration: none;
   width: 200px;
@@ -402,17 +406,22 @@
 #chatRoom button:focus {
   outline: none;
 }
-
-#chatRoom .row {
+.onlineUser {
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
 }
 
-#chatRoom .row img {
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
+.onlineUser img {
+  width: 30px;
+  border-radius: 25px;
 }
+.onlineUser p {
+  font-size: 1rem;
+  margin: 0;
+}
+
 #chatRoom .card-header {
   background-color: #283e4a;
 }
@@ -420,7 +429,7 @@
 .chat-box {
   position: fixed;
   bottom: 0%;
-  right: 15%;
+  right: 14%;
 }
 
 .chat-box .card {
@@ -443,8 +452,19 @@
   border: 0;
 }
 
+.chat-box .card-footer {
+  padding: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.chat-box .card-footer input {
+  width: 70%;
+}
+
 #messages {
   font-family: cursive;
+  overflow-y: auto;
 }
 
 .chat-box .card-footer {

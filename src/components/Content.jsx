@@ -104,7 +104,7 @@ class Content extends Component {
               <Col md={3} className='sideContent pl-4 pt-4'>
                 <SideContent
                   props={this.props}
-                  username={this.state.userInfo.username}
+                  username={this.props.username}
                   authoKey={this.props.authoKey}
                 />
               </Col>
