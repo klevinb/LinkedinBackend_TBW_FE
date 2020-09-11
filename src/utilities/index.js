@@ -1,6 +1,6 @@
 export const fetchMessagesThunk = (username) => {
   return (dispatch, getState) => {
-    fetch(process.env.REACT_APP_API + '/api/profile/messages/' + username, {
+    fetch(process.env.REACT_APP_API + '/api/profile/messages', {
       method: 'GET',
       credentials: 'include',
       headers: {
