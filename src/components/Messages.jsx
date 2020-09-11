@@ -9,18 +9,13 @@ import {
   Image,
 } from 'react-bootstrap';
 import io from 'socket.io-client';
-import { connect } from 'react-redux';
+
 import { fetchMessagesThunk } from '../utilities';
+import { connect } from 'react-redux';
 import ChatBox from './ChatBox';
 
-const mapStateToProps = (state) => state;
 const mapDispatchToProps = (dispatch) => ({
   fetchMesagges: (username) => dispatch(fetchMessagesThunk(username)),
-  addMessage: (message) =>
-    dispatch({
-      type: 'ADD_MESSAGES',
-      payload: message,
-    }),
 });
 
 class Messages extends Component {
@@ -81,13 +76,17 @@ class Messages extends Component {
       transports: ['websocket'],
     };
     this.socket = io('http://localhost:3008', connectionOpt);
-    this.socket.on('message', (msg) => {
-      this.props.fetchMesagges(this.props.username);
-    });
-
     this.socket.on('online', (data) => {
       this.setState({ onlineUsers: data });
     });
+    this.socket.on('message', (msg) => {
+      this.props.fetchMesagges(this.props.username);
+      const user = this.props.users.find((us) => us.username === msg.from);
+      if (user) {
+        this.createChat(user.name, user.username, user.image);
+      }
+    });
+
     this.setUsername();
   };
 
@@ -128,36 +127,43 @@ class Messages extends Component {
                   <Card.Body className='p-0'>
                     <ListGroup>
                       {this.state.onlineUsers &&
-                        this.state.onlineUsers
-                          .filter((user) => user !== this.props.username)
-                          .map((userName, key) => {
-                            const currentUser = this.props.users.find(
-                              (user) => user.username === userName
+                        // this.state.onlineUsers
+                        //   .filter((user) => user !== this.props.username)
+                        //   .map((userName, key) => {
+                        // const currentUser = this.props.users.find(
+                        //   (user) => user.username === userName
+                        // );
+                        // if (!currentUser)
+                        //   return (
+                        //     <ListGroupItem
+                        //       className='d-flex justify-self-center text-center'
+                        //       style={{ fontSize: '12px' }}
+                        //     >
+                        //       user not found
+                        //     </ListGroupItem>
+                        //   );
+                        this.props.users
+                          .filter(
+                            (user) => user.username !== this.props.username
+                          )
+                          .map((user, key) => {
+                            const online = this.state.onlineUsers.find(
+                              (username) => username === user.username
                             );
-                            if (!currentUser)
-                              return (
-                                <ListGroupItem
-                                  className='d-flex justify-self-center text-center'
-                                  style={{ fontSize: '12px' }}
-                                >
-                                  user not found
-                                </ListGroupItem>
-                              );
-
                             return (
                               <ListGroupItem key={key}>
                                 <div
                                   className='onlineUser'
                                   onClick={() =>
                                     this.createChat(
-                                      currentUser.name,
-                                      currentUser.username,
-                                      currentUser.image
+                                      user.name,
+                                      user.username,
+                                      user.image
                                     )
                                   }
                                 >
-                                  {currentUser.image ? (
-                                    <Image fluid src={currentUser.image} />
+                                  {user.image ? (
+                                    <Image fluid src={user.image} />
                                   ) : (
                                     <Image
                                       fluid
@@ -166,8 +172,9 @@ class Messages extends Component {
                                   )}
 
                                   <p>
-                                    {currentUser.name} {currentUser.surname}
+                                    {user.name} {user.surname}
                                   </p>
+                                  {online && <div className='onlineSign'></div>}
                                 </div>
                               </ListGroupItem>
                             );
@@ -186,11 +193,12 @@ class Messages extends Component {
                       username={this.props.username}
                       removeChat={this.removeChat}
                       sendToUser={item.sendToUser}
+                      users={this.props.users}
                       chatName={item.chatName}
-                      src={item.src}
-                      messages={this.props.messages}
+                      sender={item.username}
                       socket={this.socket}
-                      addMessage={this.props.addMessage}
+                      src={item.src}
+                      createChat={this.createChat}
                     />
                   );
                 })}
@@ -203,4 +211,4 @@ class Messages extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Messages);
+export default connect(null, mapDispatchToProps)(Messages);

@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Accordion, Row, Col, Image } from 'react-bootstrap';
-import { GiDivert } from 'react-icons/gi';
+import { Card, Badge, Image } from 'react-bootstrap';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = (dispatch) => ({
+  addMessage: (message) =>
+    dispatch({
+      type: 'ADD_MESSAGES',
+      payload: message,
+    }),
+});
 
 function ChatBox(props) {
   const [message, setMessage] = useState('');
   const [show, setShow] = useState(true);
+  const [showNotification, setShowNotification] = useState(false);
+  const [nrOfNotifications, setNrOfNotifications] = useState(0);
 
   const sendMessage = () => {
     // e.preventDefault();
@@ -26,7 +37,22 @@ function ChatBox(props) {
     }
   };
 
+  const changeState = () => {
+    setNrOfNotifications(0);
+    setShowNotification(false);
+  };
+
   useEffect(() => {
+    props.socket.on('message', (msg) => {
+      const user = props.users.find((us) => us.username === msg.from);
+      if (user) {
+        props.createChat(user.name, user.username, user.image);
+        if (!show && msg.from === props.sendToUser) {
+          setNrOfNotifications(nrOfNotifications + 1);
+          setShowNotification(true);
+        }
+      }
+    });
     var elem = document.getElementById('messages');
     if (elem) {
       elem.scrollTo(0, document.getElementById('messages').scrollHeight);
@@ -43,9 +69,12 @@ function ChatBox(props) {
           >
             <div
               className='d-flex align-items-center justify-content-between p-1 pointer'
-              onClick={() => setShow(!show)}
+              onClick={() => {
+                changeState();
+                setShow(!show);
+              }}
               style={{
-                width: '60%',
+                width: '80%',
                 height: '45px',
               }}
             >
@@ -74,6 +103,11 @@ function ChatBox(props) {
               </div>
               <div>
                 <h4>{props.chatName}</h4>
+              </div>
+              <div>
+                {showNotification && !show && (
+                  <Badge variant='warning'>{nrOfNotifications}</Badge>
+                )}
               </div>
             </div>
             <div
@@ -124,4 +158,4 @@ function ChatBox(props) {
   );
 }
 
-export default ChatBox;
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
