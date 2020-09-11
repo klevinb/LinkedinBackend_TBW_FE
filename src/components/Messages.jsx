@@ -75,7 +75,8 @@ class Messages extends Component {
     const connectionOpt = {
       transports: ['websocket'],
     };
-    this.socket = io('http://localhost:3008', connectionOpt);
+    const url = process.env.REACT_APP_API;
+    this.socket = io(url, connectionOpt);
     this.socket.on('online', (data) => {
       this.setState({ onlineUsers: data });
     });
