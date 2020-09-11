@@ -429,7 +429,21 @@
 .chat-box {
   position: fixed;
   bottom: 0%;
-  right: 14%;
+  right: 220px;
+}
+.onlineSign {
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.LoginButtons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
 }
 
 .chat-box .card {
@@ -469,4 +483,100 @@
 
 .chat-box .card-footer {
   display: flex;
+}
+
+@media (max-width: 575px) {
+  #profilePhoto {
+    border: 5px solid lightgray;
+    border-radius: 100px;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    position: absolute;
+    top: 9%;
+    left: 25%;
+  }
+  #firstCol {
+    padding-top: 0;
+  }
+
+  .contentCol button,
+  #moreInfo {
+    display: none !important;
+  }
+
+  .postImage img {
+    height: auto;
+  }
+  #status {
+    display: flex;
+    margin: 0;
+    align-items: center;
+  }
+
+  #status > div {
+    margin-top: 0 !important;
+  }
+  .navbar-toggler {
+    position: absolute;
+    top: 5%;
+    right: 2%;
+  }
+  .navbar-nav {
+    flex-direction: row !important;
+  }
+  #jumbotron {
+    height: 190px !important;
+  }
+  .editProfileButton {
+    position: absolute;
+    top: -200px;
+    right: 10%;
+  }
+  .containers {
+    overflow: hidden;
+  }
+  .Login {
+    width: 340px;
+  }
+
+  #editPhoto {
+    z-index: 9 !important;
+  }
+
+  .basic-nav-dropdown {
+    display: flex !important;
+    align-items: center !important;
+  }
+  .navHide {
+    display: none !important;
+  }
+
+  .dropdown-menu {
+    margin: 0px !important;
+    display: flex !important;
+    background: transparent !important;
+    color: white !important;
+    border: 0 !important;
+    padding: 0 !important;
+  }
+
+  .dropdown-item:hover {
+    background: transparent !important;
+  }
+  .dropdown-menu a {
+    color: white !important;
+    font-weight: 500;
+  }
+  .dropdown-menu a:last-child {
+    color: rgb(208, 44, 44) !important;
+  }
+  .navBar {
+    position: absolute !important;
+    width: 100%;
+    z-index: 99;
+  }
+  .content .row {
+    margin-top: 3.5rem !important;
+  }
 }

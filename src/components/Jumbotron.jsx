@@ -201,7 +201,7 @@ class JumBotron extends Component {
                         More ...
                       </Button>
                       <div
-                        className='pointer'
+                        className='pointer editProfileButton'
                         onClick={() =>
                           this.setState({
                             editProfile: !this.state.editProfile,
@@ -275,7 +275,7 @@ class JumBotron extends Component {
         >
           <>
             <Modal.Header>
-              <Modal.Title>Edit this Experience</Modal.Title>
+              <Modal.Title>Edit this Profile</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form

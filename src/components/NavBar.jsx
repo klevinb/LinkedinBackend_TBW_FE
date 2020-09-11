@@ -22,8 +22,12 @@ class NavBar extends Component {
           <div className='container'>
             <div className='d-flex'>
               <Image
-                src='https://touchmba.com/wp-content/uploads/2017/06/LinkedIn-Logo.png'
-                style={{ width: '50px' }}
+                src='https://image.flaticon.com/icons/png/512/174/174857.png'
+                style={{
+                  width: '50px',
+                  backgroundColor: 'white',
+                  borderRadius: '10%',
+                }}
               />
               <Navbar.Brand href='#home'></Navbar.Brand>
               <Dropdown
@@ -51,19 +55,19 @@ class NavBar extends Component {
                     Home
                   </Link>
 
-                  <Link className='text-white mr-2' to='/my-network'>
+                  <Link className='text-white mr-2 navHide' to='/my-network'>
                     <FaUserFriends />
                     My Network
                   </Link>
-                  <Link className='text-white mr-2' to='/jobs'>
+                  <Link className='text-white mr-2 navHide' to='/jobs'>
                     <FaSuitcase />
                     Jobs
                   </Link>
-                  <Link className='text-white mr-2' to='/messaging'>
+                  <Link className='text-white mr-2 navHide' to='/messaging'>
                     <BsChatSquareDots />
                     Messaging
                   </Link>
-                  <Link className='text-white mr-2' to='/notifications'>
+                  <Link className='text-white mr-2 navHide' to='/notifications'>
                     <AiOutlineBell />
                     Notifications
                   </Link>
@@ -123,13 +127,13 @@ class NavBar extends Component {
 
                   <NavDropdown
                     title='Dropdown'
-                    className='basic-nav-dropdown'
+                    className='basic-nav-dropdown navHide'
                     title='Work'
                   >
                     <NavDropdown.Item>Action</NavDropdown.Item>
                   </NavDropdown>
 
-                  <Link className='text-white mr-2' to='/learning'>
+                  <Link className='text-white mr-2 navHide' to='/learning'>
                     <FaVideo />
                     Learning
                   </Link>

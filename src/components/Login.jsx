@@ -9,9 +9,9 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
 
 import { FiUpload } from 'react-icons/fi';
+import { GrFacebook, GrLinkedin } from 'react-icons/gr';
 
 const apiKey = process.env.REACT_APP_API;
 
@@ -144,7 +144,7 @@ class Login extends Component {
     photo.append('profile', this.state.photo);
     const id = await resp.json();
 
-    const resp2 = await fetch(apiKey + '/api/profile/' + id + '/upload', {
+    await fetch(apiKey + '/api/profile/' + id + '/upload', {
       method: 'POST',
       body: photo,
       credentials: 'include',
@@ -192,14 +192,18 @@ class Login extends Component {
                     process.env.REACT_APP_API + '/api/profile/auth/facebook'
                   }
                 >
-                  <Image src='/assets/Sign-In-Large_FB.png' />
+                  <div className='LoginButtons'>
+                    <GrFacebook className='mr-2' /> Facebook
+                  </div>
                 </a>
                 <a
                   href={
                     process.env.REACT_APP_API + '/api/profile/auth/linkedin'
                   }
                 >
-                  <Image src='/assets/Sign-In-Large.png' />
+                  <div className='LoginButtons'>
+                    <GrLinkedin className='mr-2' /> Linkedin
+                  </div>
                 </a>
               </div>
               <br />

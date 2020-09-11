@@ -83,7 +83,7 @@ class Content extends Component {
         <Row>
           {this.state.userInfo && (
             <>
-              <Col md={9} className='d-flex flex-column mb-3 '>
+              <Col sm={12} md={12} lg={9} className='d-flex flex-column mb-3 '>
                 <Jumbotron
                   refetch={this.refetch}
                   username={this.props.username}
@@ -101,7 +101,7 @@ class Content extends Component {
                   user_id={this.state.userInfo.username}
                 />
               </Col>
-              <Col md={3} className='sideContent pl-4 pt-4'>
+              <Col md={12} lg={3} className='sideContent pl-4 pt-4'>
                 <SideContent
                   props={this.props}
                   username={this.props.username}
